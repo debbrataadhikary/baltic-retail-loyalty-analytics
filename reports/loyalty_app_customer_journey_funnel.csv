@@ -1,0 +1,6 @@
+Stage_Order,Funnel_Stage,Users_Count,Conversion_From_Prev_Pct,Overall_Penetration_Pct
+1,1. App Downloaded & Registered,50000,100.0,100.0
+2,2. First Digital Card Scan at POS,43600,87.2,87.2
+3,3. First Digital Coupon Activated & Redeemed,36400,83.5,72.8
+4,4. Repeat Active Shopper (3+ Visits / Month),28900,79.4,57.8
+5,5. Habitual Loyal Advocate (Weekly Multi-Category),21200,73.4,42.4

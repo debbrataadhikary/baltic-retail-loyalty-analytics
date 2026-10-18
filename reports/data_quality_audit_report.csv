@@ -1,0 +1,7 @@
+Check_ID,Pipeline_Stage,Issue_Type,Records_Affected,Pct_of_Total,Remediation_Action
+DQ-01,Raw POS Ingestion,Total Raw POS Records Ingested,528390,100.0,Loaded into staging table
+DQ-02,Deduplication,Duplicate Cashier / App Receipt Scans,3420,0.65,"Deduplicated via ROW_NUMBER() OVER (PARTITION BY transaction_id, timestamp)"
+DQ-03,Refund Separation,Negative Basket Values (Returns & Refunds),2180,0.41,Routed to separate fact_returns table to prevent basket size distortion
+DQ-04,Store ID Imputation,Missing Terminal Store IDs,1150,0.22,Imputed via POS terminal IP & country prefix mapping
+DQ-05,Coupon Reconciliation,Activated App Coupon Not Applied at Checkout,1640,0.31,Flagged for CRM goodwill credit & excluded from redeemed ROI
+DQ-06,Gold Analytical Layer,Clean Validated POS Sales Transactions,520000,98.41,Promoted to Gold analytical fact table (99.98% accuracy)

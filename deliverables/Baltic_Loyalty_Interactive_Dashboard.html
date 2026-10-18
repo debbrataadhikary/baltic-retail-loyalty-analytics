@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BalticPlus Loyalty & Promotional Intelligence | Executive Board Dashboard</title>
+<style>
+  :root {
+    --lidl-blue: #003876;
+    --lidl-mid: #0050AA;
+    --lidl-yellow: #FFF000;
+    --lidl-red: #D92B2B;
+    --lidl-green: #1E824C;
+    --bg: #F4F6F9;
+    --card: #FFFFFF;
+    --text: #1E242B;
+    --muted: #525E6C;
+    --border: #DCE2EA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Calibri, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 40px; }
+  header {
+    background: linear-gradient(135deg, var(--lidl-blue) 0%, var(--lidl-mid) 100%);
+    color: #fff; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 4px solid var(--lidl-yellow);
+  }
+  .brand-title h1 { font-size: 21px; font-weight: 700; letter-spacing: 0.3px; }
+  .brand-title p { font-size: 13px; color: #D6E4F5; margin-top: 3px; }
+  .badge-author {
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 14px; border-radius: 6px; font-size: 12px; text-align: right;
+  }
+  .container { max-width: 1340px; margin: 22px auto; padding: 0 20px; }
+  .controls-bar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+  .control-group { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--lidl-blue); }
+  select, input[type="range"] {
+    padding: 6px 12px; border-radius: 5px; border: 1px solid #B8C4D4; font-size: 13px; font-weight: 600;
+  }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 16px; margin-bottom: 22px; }
+  .kpi-card {
+    background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--lidl-blue);
+    border-radius: 8px; padding: 16px 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+  .kpi-card.highlight { border-top-color: var(--lidl-green); }
+  .kpi-card.alert { border-top-color: var(--lidl-red); }
+  .kpi-label { font-size: 12px; text-transform: uppercase; color: var(--muted); font-weight: 700; letter-spacing: 0.4px; }
+  .kpi-val { font-size: 26px; font-weight: 800; color: var(--lidl-blue); margin: 6px 0 4px; }
+  .kpi-sub { font-size: 12px; color: var(--muted); }
+  .grid-2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20px; margin-bottom: 22px; }
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); margin-bottom: 22px;
+  }
+  .panel h2 {
+    font-size: 15.5px; color: var(--lidl-blue); border-bottom: 2px solid #EEF2F7;
+    padding-bottom: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #F0F4F9; color: var(--lidl-blue); text-align: left; padding: 9px 10px; font-weight: 700; border-bottom: 2px solid var(--border); }
+  td { padding: 8px 10px; border-bottom: 1px solid #EEF2F7; }
+  tr:hover { background: #F8FAFC; }
+  .pill { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; }
+  .pill-green { background: #E6F4EA; color: #137333; }
+  .pill-blue { background: #E8F0FE; color: #1967D2; }
+  .pill-red { background: #FCE8E6; color: #C5221F; }
+  .bar-wrap { background: #EDF2F7; height: 10px; border-radius: 5px; overflow: hidden; width: 110px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+  .bar-fill { height: 100%; background: var(--lidl-mid); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-title">
+    <h1>BALTICPLUS LOYALTY & PROMOTIONAL ANALYTICS DASHBOARD</h1>
+    <p>End-to-End POS Sales Flows • Pre/Post Campaign Incrementality • Basket Halo Effect • Customer RFM Segmentation (LT, LV, EE)</p>
+  </div>
+  <div class="badge-author">
+    <strong>Prepared by: Debbrata Kumar Adhikary</strong><br/>
+    Data Analyst Portfolio (Vilnius, Lithuania)
+  </div>
+</header>
+
+<div class="container">
+  <div class="controls-bar">
+    <div class="control-group">
+      <label for="countrySelect">Baltic Market Scope:</label>
+      <select id="countrySelect" onchange="updateCountryView()">
+        <option value="ALL">All Baltics (140 Stores: LT, LV, EE)</option>
+        <option value="LT">Lithuania (87 Stores – Vilnius, Kaunas, Klaipėda+)</option>
+        <option value="LV">Latvia (30 Stores – Riga, Daugavpils+)</option>
+        <option value="EE">Estonia (23 Stores – Tallinn, Tartu+)</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="mechanicFilter">Campaign Mechanic Filter:</label>
+      <select id="mechanicFilter" onchange="filterCampaignTable()">
+        <option value="ALL">All 12 Promotional Campaigns</option>
+        <option value="Traffic & Basket Driver (High Halo)">Traffic & Basket Drivers (High Halo)</option>
+        <option value="Basket Builder (High ROI)">Basket Threshold Builders (€30+ / €40+)</option>
+        <option value="Core Margin Builder">Core Private-Label Margin Builders</option>
+        <option value="Retention & Frequency Driver">Retention & Win-Back Triggers</option>
+        <option value="Margin Destroyer (Cherry-Picked & Stockpiled)">Margin Destroyers (Cherry-Picked)</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="simSlider">What-If Cherry-Picker Minimum Spend Threshold (€20):</label>
+      <input type="range" id="simSlider" min="0" max="100" value="50" oninput="updateSimulator()" />
+      <span id="simLabel" style="color:#137333; font-weight:700;">50% Adoption → +€84,200 Saved Margin</span>
+    </div>
+  </div>
+
+  <!-- Executive KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Clean Validated POS Baskets</div>
+      <div class="kpi-val" id="kpiTx">520,000</div>
+      <div class="kpi-sub">Cleaned from 528,390 raw POS logs (99.98% quality)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Net Sales (6M)</div>
+      <div class="kpi-val" id="kpiSales">€13.08M</div>
+      <div class="kpi-sub">79.1% generated via Loyalty App scans</div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Loyalty vs. Guest Basket</div>
+      <div class="kpi-val" id="kpiBasket">€29.26 vs €16.43</div>
+      <div class="kpi-sub">+€12.83 (+78.1%) higher basket with Loyalty App</div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Loyalty App Scan Share</div>
+      <div class="kpi-val" id="kpiPen">68.0%</div>
+      <div class="kpi-sub">46.5% of loyalty baskets redeem ≥1 coupon</div>
+    </div>
+    <div class="kpi-card alert">
+      <div class="kpi-label">Promo Budget Variance Alert</div>
+      <div class="kpi-val" id="kpiBudget">€581.8K / €625K</div>
+      <div class="kpi-sub">3 cherry-picked promos exceeded budget by +64%</div>
+    </div>
+  </div>
+
+  <!-- Campaign Pre/Post Incrementality Table -->
+  <div class="panel">
+    <h2>
+      <span>1. End-to-End Campaign Pre- & Post-Analysis (Incrementality, Basket Halo & Budget Efficiency)</span>
+      <span style="font-size:12px; color:var(--muted); font-weight:normal;">Sorted by True Net Incremental ROI (%)</span>
+    </h2>
+    <table id="campaignTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Campaign Name</th>
+          <th>Commercial Classification</th>
+          <th>Avg Promo Item (€)</th>
+          <th>Attached Halo Basket (€)</th>
+          <th>Cherry-Pick %</th>
+          <th>Post-Promo Pantry Dip</th>
+          <th>Budget Used %</th>
+          <th>True Net ROI %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cls="Traffic & Basket Driver (High Halo)">
+          <td><strong>CMP-09</strong></td><td>Baltic Grill & Fresh Meat -20% Weekend</td>
+          <td><span class="pill pill-green">Traffic & Basket Driver (High Halo)</span></td>
+          <td>€5.99</td><td><strong>€33.81</strong></td><td>18.5%</td><td>-4.2%</td><td>25.7%</td><td><strong style="color:#137333;">+479.1%</strong></td>
+        </tr>
+        <tr data-cls="Traffic & Basket Driver (High Halo)">
+          <td><strong>CMP-06</strong></td><td>Fresh Bananas & Berries -25% App Deal</td>
+          <td><span class="pill pill-green">Traffic & Basket Driver (High Halo)</span></td>
+          <td>€6.01</td><td><strong>€33.97</strong></td><td>18.5%</td><td>-4.2%</td><td>52.7%</td><td><strong style="color:#137333;">+365.1%</strong></td>
+        </tr>
+        <tr data-cls="Traffic & Basket Driver (High Halo)">
+          <td><strong>CMP-01</strong></td><td>Baltic Fresh Bakery -30% App Coupon</td>
+          <td><span class="pill pill-green">Traffic & Basket Driver (High Halo)</span></td>
+          <td>€6.01</td><td><strong>€34.10</strong></td><td>18.5%</td><td>-4.2%</td><td>58.8%</td><td><strong style="color:#137333;">+289.2%</strong></td>
+        </tr>
+        <tr data-cls="Core Margin Builder">
+          <td><strong>CMP-03</strong></td><td>Private Label Dairy & Cheese -20%</td>
+          <td><span class="pill pill-blue">Core Margin Builder</span></td>
+          <td>€8.74</td><td><strong>€28.73</strong></td><td>18.5%</td><td>-6.0%</td><td>44.4%</td><td><strong style="color:#137333;">+246.3%</strong></td>
+        </tr>
+        <tr data-cls="Basket Builder (High ROI)">
+          <td><strong>CMP-02</strong></td><td>Spend €30 Get €3 Off Weekend Basket</td>
+          <td><span class="pill pill-blue">Basket Builder (High ROI)</span></td>
+          <td>€11.01</td><td><strong>€39.96</strong></td><td>11.2%</td><td>-3.1%</td><td>61.7%</td><td><strong style="color:#137333;">+224.0%</strong></td>
+        </tr>
+        <tr data-cls="Core Margin Builder">
+          <td><strong>CMP-10</strong></td><td>Organic & BIO Range -25% Green Week</td>
+          <td><span class="pill pill-blue">Core Margin Builder</span></td>
+          <td>€8.75</td><td><strong>€28.70</strong></td><td>18.5%</td><td>-6.0%</td><td>98.3%</td><td><strong style="color:#137333;">+177.1%</strong></td>
+        </tr>
+        <tr data-cls="Retention & Frequency Driver">
+          <td><strong>CMP-07</strong></td><td>Digital Scratch Card €1.50 Instant Reward</td>
+          <td><span class="pill pill-blue">Retention & Frequency Driver</span></td>
+          <td>€6.99</td><td><strong>€29.96</strong></td><td>18.5%</td><td>-2.5%</td><td>83.2%</td><td><strong style="color:#137333;">+170.2%</strong></td>
+        </tr>
+        <tr data-cls="Retention & Frequency Driver">
+          <td><strong>CMP-12</strong></td><td>Inactive 21-Day Win-Back €4 Off €25</td>
+          <td><span class="pill pill-blue">Retention & Frequency Driver</span></td>
+          <td>€7.00</td><td><strong>€29.84</strong></td><td>18.5%</td><td>-2.5%</td><td>104.4%</td><td><strong style="color:#137333;">+168.5%</strong></td>
+        </tr>
+        <tr data-cls="Basket Builder (High ROI)">
+          <td><strong>CMP-05</strong></td><td>Spend €40 Get €5 Off Family Stock-Up</td>
+          <td><span class="pill pill-blue">Basket Builder (High ROI)</span></td>
+          <td>€10.99</td><td><strong>€39.97</strong></td><td>11.2%</td><td>-3.1%</td><td>91.6%</td><td><strong style="color:#137333;">+94.5%</strong></td>
+        </tr>
+        <tr data-cls="Margin Destroyer (Cherry-Picked & Stockpiled)">
+          <td><strong>CMP-04</strong></td><td>Imported Coffee Beans XXL -35% Promo</td>
+          <td><span class="pill pill-red">Margin Destroyer (Cherry-Picked)</span></td>
+          <td>€16.49</td><td><strong>€3.33</strong></td><td>68.4%</td><td>-26.5%</td><td style="color:#C5221F;font-weight:700;">126.5%</td><td><strong style="color:#C5221F;">-90.3%</strong></td>
+        </tr>
+        <tr data-cls="Margin Destroyer (Cherry-Picked & Stockpiled)">
+          <td><strong>CMP-11</strong></td><td>Household Detergent XXL -40% Coupon</td>
+          <td><span class="pill pill-red">Margin Destroyer (Cherry-Picked)</span></td>
+          <td>€16.47</td><td><strong>€3.34</strong></td><td>68.4%</td><td>-26.5%</td><td style="color:#C5221F;font-weight:700;">175.2%</td><td><strong style="color:#C5221F;">-91.5%</strong></td>
+        </tr>
+        <tr data-cls="Margin Destroyer (Cherry-Picked & Stockpiled)">
+          <td><strong>CMP-08</strong></td><td>Cooking Oil 2L 1+1 Free App Coupon</td>
+          <td><span class="pill pill-red">Margin Destroyer (Cherry-Picked)</span></td>
+          <td>€16.51</td><td><strong>€3.35</strong></td><td>68.4%</td><td>-26.5%</td><td style="color:#C5221F;font-weight:700;">192.7%</td><td><strong style="color:#C5221F;">-93.2%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <!-- Customer Segmentation Table -->
+    <div class="panel" style="margin-bottom:0;">
+      <h2><span>2. Customer RFM & Promo-Sensitivity Segments (50,000 Members)</span></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Customer Segment</th>
+            <th>Members</th>
+            <th>Avg Basket</th>
+            <th>Coupon Rate</th>
+            <th>Strategic CRM Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>VIP Full-Basket Family</strong></td><td>8,899</td><td><strong>€45.97</strong></td><td>38.3%</td>
+            <td>Protect margin; reward with experiential perks rather than deep % discounts.</td>
+          </tr>
+          <tr>
+            <td><strong>Core Weekly Loyal</strong></td><td>17,043</td><td><strong>€31.88</strong></td><td>41.9%</td>
+            <td>Target with 'Spend €35 Get €3.50 Off' threshold to stretch basket size.</td>
+          </tr>
+          <tr>
+            <td><strong>Promo Cherry Picker</strong></td><td>10,899</td><td><strong>€22.04</strong></td><td style="color:#C5221F;font-weight:700;">78.1%</td>
+            <td>Enforce €20 minimum non-promo basket threshold to unlock deep deals.</td>
+          </tr>
+          <tr>
+            <td><strong>Single-Category Shopper</strong></td><td>7,081</td><td><strong>€18.96</strong></td><td>35.2%</td>
+            <td>Send cross-category bundle coupons pairing Bakery/Produce with Dairy.</td>
+          </tr>
+          <tr>
+            <td><strong>At-Risk / Slipping (21d+)</strong></td><td>6,032</td><td><strong>€22.50</strong></td><td>27.9%</td>
+            <td>Trigger automated €4 off €25 win-back push notification at Day 18.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- App Journey Funnel & Data Quality Summary -->
+    <div class="panel" style="margin-bottom:0;">
+      <h2><span>3. Loyalty App Customer Journey & POS Data Cleaning Audit</span></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Loyalty App Funnel Stage</th>
+            <th>Users</th>
+            <th>Penetration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1. App Downloaded & Registered</td><td>50,000</td><td><div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>100.0%</td></tr>
+          <tr><td>2. First Digital Card Scan at POS</td><td>43,600</td><td><div class="bar-wrap"><div class="bar-fill" style="width:87.2%"></div></div>87.2%</td></tr>
+          <tr><td>3. First Coupon Activated & Redeemed</td><td>36,400</td><td><div class="bar-wrap"><div class="bar-fill" style="width:72.8%"></div></div>72.8%</td></tr>
+          <tr><td>4. Repeat Active (3+ Visits / Month)</td><td>28,900</td><td><div class="bar-wrap"><div class="bar-fill" style="width:57.8%"></div></div>57.8%</td></tr>
+          <tr><td>5. Habitual Weekly Multi-Category Loyal</td><td>21,200</td><td><div class="bar-wrap"><div class="bar-fill" style="width:42.4%"></div></div>42.4%</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px; padding:10px 12px; background:#F0F4F9; border-left:4px solid var(--lidl-blue); font-size:12.5px;">
+        <strong>POS Data Cleaning Pipeline Summary (528,390 Raw → 520,000 Clean):</strong><br/>
+        • Removed <strong>3,420</strong> duplicate cashier/app scans via <code>ROW_NUMBER()</code><br/>
+        • Isolated <strong>2,180</strong> negative refund rows into <code>fact_returns</code><br/>
+        • Imputed <strong>1,150</strong> missing store IDs & reconciled <strong>1,640</strong> unredeemed coupon glitches.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const countryData = {
+  ALL: { tx: "520,000", sales: "€13.08M", basket: "€29.26 vs €16.43", pen: "68.0%", budget: "€581.8K / €625K" },
+  LT:  { tx: "317,341", sales: "€7.96M",  basket: "€29.17 vs €16.44", pen: "67.9%", budget: "€354.9K / €380K" },
+  LV:  { tx: "119,665", sales: "€3.03M",  basket: "€29.45 vs €16.41", pen: "68.1%", budget: "€133.4K / €145K" },
+  EE:  { tx: "82,994",  sales: "€2.09M",  basket: "€29.30 vs €16.44", pen: "68.2%", budget: "€93.5K / €100K" }
+};
+function updateCountryView() {
+  const c = document.getElementById("countrySelect").value;
+  const d = countryData[c];
+  document.getElementById("kpiTx").innerText = d.tx;
+  document.getElementById("kpiSales").innerText = d.sales;
+  document.getElementById("kpiBasket").innerText = d.basket;
+  document.getElementById("kpiPen").innerText = d.pen;
+  document.getElementById("kpiBudget").innerText = d.budget;
+}
+function filterCampaignTable() {
+  const val = document.getElementById("mechanicFilter").value;
+  const rows = document.querySelectorAll("#campaignTable tbody tr");
+  rows.forEach(r => {
+    const cls = r.getAttribute("data-cls");
+    r.style.display = (val === "ALL" || cls === val) ? "" : "none";
+  });
+}
+function updateSimulator() {
+  const pct = parseInt(document.getElementById("simSlider").value, 10);
+  const saved = Math.round(pct * 1684);
+  document.getElementById("simLabel").innerText = pct + "% Adoption → +€" + saved.toLocaleString() + " Saved Margin";
+}
+</script>
+</body>
+</html>

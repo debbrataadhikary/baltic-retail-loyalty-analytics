@@ -1,0 +1,13 @@
+campaign_id,campaign_name,mechanic_type,target_category,nominal_discount_pct,planned_budget_eur,commercial_classification
+CMP-01,Baltic Fresh Bakery -30% App Coupon,Category % Discount,Bakery,30.0,42000,Traffic & Basket Driver (High Halo)
+CMP-02,Spend €30 Get €3 Off Weekend Basket,Basket Threshold (€30+),Cross-Category,10.0,68000,Basket Builder (High ROI)
+CMP-03,Private Label Dairy & Cheese -20%,Category % Discount,Dairy & Eggs,20.0,54000,Core Margin Builder
+CMP-04,Imported Coffee Beans XXL -35% Promo,Deep Item Discount,Beverages & Coffee,35.0,61000,Margin Destroyer (Cherry-Picked & Stockpiled)
+CMP-05,Spend €40 Get €5 Off Family Stock-Up,Basket Threshold (€40+),Cross-Category,12.5,75000,Basket Builder (High ROI)
+CMP-06,Fresh Bananas & Berries -25% App Deal,Category % Discount,Fruit & Veg,25.0,39000,Traffic & Basket Driver (High Halo)
+CMP-07,Digital Scratch Card €1.50 Instant Reward,Gamified Scratch Card,Cross-Category,8.0,45000,Retention & Frequency Driver
+CMP-08,Cooking Oil 2L 1+1 Free App Coupon,Multi-Buy BOGO,Pantry Staples,50.0,58000,Margin Destroyer (Cherry-Picked & Stockpiled)
+CMP-09,Baltic Grill & Fresh Meat -20% Weekend,Category % Discount,Meat & Poultry,20.0,64000,Traffic & Basket Driver (High Halo)
+CMP-10,Organic & BIO Range -25% Green Week,Category % Discount,Organic & Health,25.0,31000,Core Margin Builder
+CMP-11,Household Detergent XXL -40% Coupon,Deep Item Discount,Household,40.0,52000,Margin Destroyer (Cherry-Picked & Stockpiled)
+CMP-12,Inactive 21-Day Win-Back €4 Off €25,Win-Back Targeted,Cross-Category,16.0,36000,Retention & Frequency Driver

@@ -1,0 +1,6 @@
+customer_archetype,Total_Transactions,Unique_Customers,Avg_Net_Basket_EUR,Avg_Items_Per_Basket,Coupon_Usage_Rate_Pct,Total_Net_Sales_EUR,Total_Discount_Claimed_EUR,Total_Net_Margin_EUR,Recommended_CRM_Action
+At-Risk / Slipping,42710,6032,22.5,7.0,27.9,961153.73,42059.77,203726.93,Automated Win-Back: Trigger €4 off €25 push notification after 18 days of scan inactivity.
+Core Weekly Loyal,120934,17043,31.88,11.0,41.9,3855639.41,179776.22,808898.42,Basket Stretch: Target with 'Spend €35 Get €3.50 Off' threshold coupons to lift basket from €29 to €36+.
+Promo-Driven Cherry Picker,77141,10899,22.04,3.0,78.1,1700266.6,212363.47,256229.67,Curb Cherry-Picking: Replace standalone deep item discounts with minimum €20 basket spend unlocks.
+Single-Category Shopper,50333,7081,18.96,4.0,35.2,954563.72,62813.12,186443.18,Cross-Category Halo: Trigger personalized bundled coupons pairing Bakery/Fruit with Dairy & Meat.
+VIP Full-Basket Family,62519,8899,45.97,16.0,38.3,2874092.14,84790.98,640136.71,"Protect Margin: Avoid deep % discounts; reward with experiential perks, partner vouchers & early access."

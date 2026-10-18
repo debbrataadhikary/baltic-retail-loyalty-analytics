@@ -1,0 +1,4 @@
+Country,Country_Code,Active_Stores,Total_Transactions,Total_Net_Sales_EUR,Loyalty_Scan_Share_Pct,Loyalty_Revenue_Share_Pct,Avg_Basket_Loyalty_EUR,Avg_Basket_Guest_EUR,Basket_Uplift_EUR,Basket_Uplift_Pct,Coupon_Redemption_Rate_Pct,Total_Promo_Discount_EUR
+Lithuania,LT,87,317341,7959885.7,67.92,78.98,29.17,16.44,12.73,77.5,46.53,354853.52
+Latvia,LV,30,119665,3026783.7,68.13,79.33,29.45,16.41,13.05,79.5,46.38,133433.64
+Estonia,EE,23,82994,2092350.23,68.17,79.24,29.3,16.44,12.86,78.2,46.62,93516.4
