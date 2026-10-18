@@ -1,0 +1,197 @@
+table campaign_pre_post_incrementality_roi
+	lineageTag: 5350e5af-9e29-417e-97db-27c819788c56
+
+	column campaign_id
+		dataType: string
+		lineageTag: 6b946819-d0d8-4cd4-a867-f97425f99f88
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+	column campaign_name
+		dataType: string
+		lineageTag: f99ee62b-f9a1-42f0-84b7-1b4a6335f175
+		summarizeBy: none
+		sourceColumn: campaign_name
+
+	column mechanic_type
+		dataType: string
+		lineageTag: 3ac67131-04e6-48cb-9566-4ec63d9b2b5b
+		summarizeBy: none
+		sourceColumn: mechanic_type
+
+	column target_category
+		dataType: string
+		lineageTag: 3587bb25-d82f-42d4-9c9c-efa5f61a1d44
+		summarizeBy: none
+		sourceColumn: target_category
+
+	column nominal_discount_pct
+		dataType: double
+		lineageTag: 5b178426-dcf4-4e74-86f6-b56ee357a83c
+		summarizeBy: average
+		sourceColumn: nominal_discount_pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column planned_budget_eur
+		dataType: double
+		lineageTag: 930cf4fd-2990-4504-8fe1-68eac50d1cbe
+		summarizeBy: sum
+		sourceColumn: planned_budget_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column commercial_classification
+		dataType: string
+		lineageTag: 60db7610-977e-4918-8d68-c922965c3e2e
+		summarizeBy: none
+		sourceColumn: commercial_classification
+
+	column Redemptions
+		dataType: int64
+		lineageTag: 6421a488-6c56-457a-99b2-3fe25e10009d
+		summarizeBy: sum
+		sourceColumn: Redemptions
+
+	column Avg_Promo_Item_Spend_EUR
+		dataType: double
+		lineageTag: 6a3acc84-20ec-4c06-9100-4d43e523f832
+		summarizeBy: average
+		sourceColumn: Avg_Promo_Item_Spend_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Halo_Other_Spend_EUR
+		dataType: double
+		lineageTag: 67c33c78-b10d-4930-8d87-a7fd38cf0a2f
+		summarizeBy: average
+		sourceColumn: Avg_Halo_Other_Spend_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Gross_Basket_EUR
+		dataType: double
+		lineageTag: 0906b07a-db61-43ef-9129-e91fa039fab9
+		summarizeBy: average
+		sourceColumn: Avg_Gross_Basket_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Net_Basket_EUR
+		dataType: double
+		lineageTag: cdfe82d7-9c72-4a8a-863d-35a670a23d74
+		summarizeBy: average
+		sourceColumn: Avg_Net_Basket_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Gross_Revenue_EUR
+		dataType: double
+		lineageTag: e630b9bb-a439-469a-9f17-25e79eb98c30
+		summarizeBy: sum
+		sourceColumn: Total_Gross_Revenue_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Discount_Cost_EUR
+		dataType: double
+		lineageTag: f82d6639-0b84-474f-83ae-6eb3fa52496c
+		summarizeBy: sum
+		sourceColumn: Total_Discount_Cost_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Net_Revenue_EUR
+		dataType: double
+		lineageTag: 3bfd3551-226c-4e57-95f7-8c7bbfe34d8b
+		summarizeBy: sum
+		sourceColumn: Total_Net_Revenue_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Net_Margin_EUR
+		dataType: double
+		lineageTag: 0221bf4d-774c-4676-b4c3-6398a087258d
+		summarizeBy: sum
+		sourceColumn: Total_Net_Margin_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cannibalization_Rate_Pct
+		dataType: double
+		lineageTag: 8e4b48d5-7d0d-44c4-a0b3-670f75607efd
+		summarizeBy: average
+		sourceColumn: Cannibalization_Rate_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Post_Campaign_Pantry_Dip_Pct
+		dataType: double
+		lineageTag: 058e405c-07db-4e00-8743-0c0ae598a9a3
+		summarizeBy: average
+		sourceColumn: Post_Campaign_Pantry_Dip_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cherry_Picker_Share_Pct
+		dataType: double
+		lineageTag: c99c1940-4eaa-49ab-8bdd-18c24d133be8
+		summarizeBy: average
+		sourceColumn: Cherry_Picker_Share_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column True_Incremental_Revenue_EUR
+		dataType: double
+		lineageTag: b67ba3ce-dff6-48c1-9508-576b4867a9ab
+		summarizeBy: sum
+		sourceColumn: True_Incremental_Revenue_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Net_Incremental_Margin_EUR
+		dataType: double
+		lineageTag: 1d589500-8e82-4b8d-90cb-59d31fda637b
+		summarizeBy: sum
+		sourceColumn: Net_Incremental_Margin_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Net_Campaign_ROI_Pct
+		dataType: double
+		lineageTag: ee6779d6-1a44-410b-8862-9fb2d92480dd
+		summarizeBy: average
+		sourceColumn: Net_Campaign_ROI_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Budget_Utilization_Pct
+		dataType: double
+		lineageTag: 2d5fb892-3273-4b3c-9e44-e997e9b68ed5
+		summarizeBy: average
+		sourceColumn: Budget_Utilization_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Budget_Variance_EUR
+		dataType: double
+		lineageTag: e0e50a17-46b8-4805-bee9-52ffa40102be
+		summarizeBy: sum
+		sourceColumn: Budget_Variance_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition campaign_pre_post_incrementality_roi = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("d:\\DW- Internship\\Lidl-Loyalty-Data-Analyst\\baltic-retail-loyalty-analytics\\reports\\campaign_pre_post_incrementality_roi.csv"),[Delimiter=",", Columns=24, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{"campaign_id", type text}, {"campaign_name", type text}, {"mechanic_type", type text}, {"target_category", type text}, {"nominal_discount_pct", type number}, {"planned_budget_eur", type number}, {"commercial_classification", type text}, {"Redemptions", Int64.Type}, {"Avg_Promo_Item_Spend_EUR", type number}, {"Avg_Halo_Other_Spend_EUR", type number}, {"Avg_Gross_Basket_EUR", type number}, {"Avg_Net_Basket_EUR", type number}, {"Total_Gross_Revenue_EUR", type number}, {"Total_Discount_Cost_EUR", type number}, {"Total_Net_Revenue_EUR", type number}, {"Total_Net_Margin_EUR", type number}, {"Cannibalization_Rate_Pct", type number}, {"Post_Campaign_Pantry_Dip_Pct", type number}, {"Cherry_Picker_Share_Pct", type number}, {"True_Incremental_Revenue_EUR", type number}, {"Net_Incremental_Margin_EUR", type number}, {"Net_Campaign_ROI_Pct", type number}, {"Budget_Utilization_Pct", type number}, {"Budget_Variance_EUR", type number}})
+				in
+				    ChangedType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

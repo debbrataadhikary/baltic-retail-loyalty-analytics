@@ -172,6 +172,33 @@
             "name": "PBI_ResultType",
             "value": "Table"
           }
+        ],
+        "measures": [
+          {
+            "name": "Total Baltic Net Sales (\u20ac)",
+            "expression": "SUM(baltic_executive_country_kpis[Total_Net_Sales_EUR])",
+            "formatString": "\u20ac#,0"
+          },
+          {
+            "name": "Total Validated POS Baskets",
+            "expression": "SUM(baltic_executive_country_kpis[Total_Transactions])",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Loyalty Basket (\u20ac)",
+            "expression": "AVERAGE(baltic_executive_country_kpis[Avg_Basket_Loyalty_EUR])",
+            "formatString": "\u20ac#,0.00"
+          },
+          {
+            "name": "Guest Basket (\u20ac)",
+            "expression": "AVERAGE(baltic_executive_country_kpis[Avg_Basket_Guest_EUR])",
+            "formatString": "\u20ac#,0.00"
+          },
+          {
+            "name": "Loyalty Scan Share (%)",
+            "expression": "AVERAGE(baltic_executive_country_kpis[Loyalty_Scan_Share_Pct]) / 100",
+            "formatString": "0.0%"
+          }
         ]
       },
       {

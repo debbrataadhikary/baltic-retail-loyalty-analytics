@@ -1,0 +1,165 @@
+table fact_pos_transactions_gold
+	lineageTag: 87ac5dda-9b1c-4654-899b-a29d1bd4200a
+
+	measure 'Total Net Sales (€)' = SUM(fact_pos_transactions_gold[net_sales_eur])
+		formatString: €#,0.00
+		lineageTag: ebc5a76c-59a6-4e40-8933-ff14727c2b50
+
+	measure 'Total Validated Baskets' = DISTINCTCOUNT(fact_pos_transactions_gold[transaction_id])
+		formatString: #,0
+		lineageTag: 7a9ae904-b965-4149-852f-b8a3b8fa64bc
+
+	measure 'Average Net Basket (€)' = DIVIDE([Total Net Sales (€)], [Total Validated Baskets], 0)
+		formatString: €#,0.00
+		lineageTag: 0c257365-de0a-4613-b53a-b17ace3351bd
+
+	measure 'Loyalty Scan Penetration (%)' = DIVIDE(CALCULATE([Total Validated Baskets], fact_pos_transactions_gold[is_loyalty_scan]=1), [Total Validated Baskets], 0)
+		formatString: 0.0%
+		lineageTag: 63fcb01b-8c6d-4cff-becf-6fe28065afd1
+
+	measure 'Avg Loyalty Basket (€)' = CALCULATE([Average Net Basket (€)], fact_pos_transactions_gold[is_loyalty_scan]=1)
+		formatString: €#,0.00
+		lineageTag: fa0e65de-b8ad-4427-8a97-85153048bd38
+
+	measure 'Avg Guest Basket (€)' = CALCULATE([Average Net Basket (€)], fact_pos_transactions_gold[is_loyalty_scan]=0)
+		formatString: €#,0.00
+		lineageTag: 79bca953-97cd-458f-8acc-518c831f6cbb
+
+	measure 'Loyalty Basket Uplift (€)' = [Avg Loyalty Basket (€)] - [Avg Guest Basket (€)]
+		formatString: +€#,0.00;-€#,0.00;€0.00
+		lineageTag: e5ae72bf-9bab-4db0-8b8f-a4bb981c6c71
+
+	column transaction_id
+		dataType: string
+		lineageTag: 7558c9f7-9b3f-4ef4-88bd-eb3bed370042
+		summarizeBy: none
+		sourceColumn: transaction_id
+
+	column transaction_date
+		dataType: string
+		lineageTag: 21c5b7bb-b8b9-4596-a9c2-2f9c5c1dade4
+		summarizeBy: none
+		sourceColumn: transaction_date
+
+	column fiscal_week
+		dataType: int64
+		lineageTag: 9047948e-4351-4769-b00f-6aca007d988f
+		summarizeBy: none
+		sourceColumn: fiscal_week
+
+	column country_code
+		dataType: string
+		lineageTag: df965e73-f03e-4191-b638-ea1a22bf9df9
+		summarizeBy: none
+		sourceColumn: country_code
+
+	column store_id
+		dataType: string
+		lineageTag: c50fdfc5-0570-4824-b058-39c4cb66d5f8
+		summarizeBy: none
+		sourceColumn: store_id
+
+	column is_loyalty_scan
+		dataType: int64
+		lineageTag: c5946d40-4ac5-4f47-8a51-971759189688
+		summarizeBy: sum
+		sourceColumn: is_loyalty_scan
+
+	column customer_id
+		dataType: string
+		lineageTag: 27cb2694-386c-41d9-8f20-7bbdbff2f7c6
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column customer_archetype
+		dataType: string
+		lineageTag: f9a28734-0ea5-4367-857e-490cab963035
+		summarizeBy: none
+		sourceColumn: customer_archetype
+
+	column coupon_applied
+		dataType: int64
+		lineageTag: d1f5df76-ab87-45e4-aecc-96231dedaaf5
+		summarizeBy: sum
+		sourceColumn: coupon_applied
+
+	column campaign_id
+		dataType: string
+		lineageTag: bd956615-f563-4fd7-96cc-e273584219d8
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+	column items_count
+		dataType: int64
+		lineageTag: b2ffa062-4f64-4a2e-9ed3-95b9b311927f
+		summarizeBy: sum
+		sourceColumn: items_count
+
+	column promo_item_spend_eur
+		dataType: double
+		lineageTag: 40ce50cc-c79f-4a9e-8ece-16b33c190645
+		summarizeBy: sum
+		sourceColumn: promo_item_spend_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column non_promo_halo_spend_eur
+		dataType: double
+		lineageTag: 0227867e-5177-412a-91b6-87ae00b2913a
+		summarizeBy: sum
+		sourceColumn: non_promo_halo_spend_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gross_basket_eur
+		dataType: double
+		lineageTag: fba62f25-6fd6-4383-abdb-34acbeb31f99
+		summarizeBy: sum
+		sourceColumn: gross_basket_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_amount_eur
+		dataType: double
+		lineageTag: 43c631fb-055d-409a-99ea-1acc6be47fec
+		summarizeBy: sum
+		sourceColumn: discount_amount_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column net_sales_eur
+		dataType: double
+		lineageTag: 67c8e6cd-7fa8-4228-a3bb-846ff3741ef4
+		summarizeBy: sum
+		sourceColumn: net_sales_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column net_margin_eur
+		dataType: double
+		lineageTag: de77c95d-dfec-4a94-a359-b86e54fbd170
+		summarizeBy: sum
+		sourceColumn: net_margin_eur
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column record_status
+		dataType: string
+		lineageTag: 2e31e96f-451a-48cb-9b43-16297073ff70
+		summarizeBy: none
+		sourceColumn: record_status
+
+	partition fact_pos_transactions_gold = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("d:\\DW- Internship\\Lidl-Loyalty-Data-Analyst\\baltic-retail-loyalty-analytics\\data\\processed\\fact_pos_transactions_gold.csv"),[Delimiter=",", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{"transaction_id", type text}, {"transaction_date", type text}, {"fiscal_week", Int64.Type}, {"country_code", type text}, {"store_id", type text}, {"is_loyalty_scan", Int64.Type}, {"customer_id", type text}, {"customer_archetype", type text}, {"coupon_applied", Int64.Type}, {"campaign_id", type text}, {"items_count", Int64.Type}, {"promo_item_spend_eur", type number}, {"non_promo_halo_spend_eur", type number}, {"gross_basket_eur", type number}, {"discount_amount_eur", type number}, {"net_sales_eur", type number}, {"net_margin_eur", type number}, {"record_status", type text}})
+				in
+				    ChangedType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

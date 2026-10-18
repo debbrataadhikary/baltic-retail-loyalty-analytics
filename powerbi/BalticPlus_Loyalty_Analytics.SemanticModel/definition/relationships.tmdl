@@ -1,0 +1,8 @@
+relationship rel_store_pos
+	fromColumn: fact_pos_transactions_gold.store_id
+	toColumn: dim_stores.store_id
+
+relationship rel_camp_pos
+	fromColumn: fact_pos_transactions_gold.campaign_id
+	toColumn: campaign_pre_post_incrementality_roi.campaign_id
+

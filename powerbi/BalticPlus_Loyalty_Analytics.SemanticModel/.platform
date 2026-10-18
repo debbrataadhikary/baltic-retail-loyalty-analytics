@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "BalticPlus_Loyalty_Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c71ce3c1-78d5-41a6-9e85-5328d2ac352c"
+  }
+}

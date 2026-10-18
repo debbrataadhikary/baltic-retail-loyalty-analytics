@@ -1,0 +1,51 @@
+table loyalty_app_customer_journey_funnel
+	lineageTag: cfdc0494-f3dd-42e3-8392-33ce19b3eef0
+
+	column Stage_Order
+		dataType: int64
+		lineageTag: 32385de9-5e8e-4160-bd7d-e91eaa2977c6
+		summarizeBy: sum
+		sourceColumn: Stage_Order
+
+	column Funnel_Stage
+		dataType: string
+		lineageTag: c4c80ac2-6b00-43cd-a8f6-e4c99357b32d
+		summarizeBy: none
+		sourceColumn: Funnel_Stage
+
+	column Users_Count
+		dataType: int64
+		lineageTag: 5b4fa1da-dd22-4c01-82a2-3bc72cb2cc45
+		summarizeBy: sum
+		sourceColumn: Users_Count
+
+	column Conversion_From_Prev_Pct
+		dataType: double
+		lineageTag: 144a355e-23bd-4008-a3dd-6e9317d29525
+		summarizeBy: average
+		sourceColumn: Conversion_From_Prev_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Overall_Penetration_Pct
+		dataType: double
+		lineageTag: 6ceb20de-b190-4b8d-a93c-e5cfb5be9b2e
+		summarizeBy: average
+		sourceColumn: Overall_Penetration_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition loyalty_app_customer_journey_funnel = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("d:\\DW- Internship\\Lidl-Loyalty-Data-Analyst\\baltic-retail-loyalty-analytics\\reports\\loyalty_app_customer_journey_funnel.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{"Stage_Order", Int64.Type}, {"Funnel_Stage", type text}, {"Users_Count", Int64.Type}, {"Conversion_From_Prev_Pct", type number}, {"Overall_Penetration_Pct", type number}})
+				in
+				    ChangedType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

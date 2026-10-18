@@ -1,0 +1,89 @@
+table customer_rfm_promo_segmentation
+	lineageTag: 4fa828cd-5343-4e58-8393-dc0f48eaa179
+
+	column customer_archetype
+		dataType: string
+		lineageTag: 858b4c7d-d406-4ad6-801d-3ec3c3ddb76f
+		summarizeBy: none
+		sourceColumn: customer_archetype
+
+	column Total_Transactions
+		dataType: int64
+		lineageTag: 92fdeb5a-8e11-4e19-a413-b7fbb083111a
+		summarizeBy: sum
+		sourceColumn: Total_Transactions
+
+	column Unique_Customers
+		dataType: int64
+		lineageTag: 8e6c7fc5-01ee-45f9-aa54-96232aca1aeb
+		summarizeBy: sum
+		sourceColumn: Unique_Customers
+
+	column Avg_Net_Basket_EUR
+		dataType: double
+		lineageTag: 313fa76f-c0ef-4cf5-920f-f1b2e64964ee
+		summarizeBy: average
+		sourceColumn: Avg_Net_Basket_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Items_Per_Basket
+		dataType: double
+		lineageTag: 0e399e49-6e44-4708-a969-db664f95767a
+		summarizeBy: average
+		sourceColumn: Avg_Items_Per_Basket
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Coupon_Usage_Rate_Pct
+		dataType: double
+		lineageTag: 5fc97168-97b8-46d4-a651-36d29b4b3665
+		summarizeBy: average
+		sourceColumn: Coupon_Usage_Rate_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Net_Sales_EUR
+		dataType: double
+		lineageTag: 09d9b653-69bd-42eb-952f-2a3e8167495d
+		summarizeBy: sum
+		sourceColumn: Total_Net_Sales_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Discount_Claimed_EUR
+		dataType: double
+		lineageTag: ae5c6e9a-edd4-4015-b50d-f71df2ed51de
+		summarizeBy: sum
+		sourceColumn: Total_Discount_Claimed_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Net_Margin_EUR
+		dataType: double
+		lineageTag: a8ef1033-ed74-4d68-ad84-7c6a08823cc0
+		summarizeBy: sum
+		sourceColumn: Total_Net_Margin_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Recommended_CRM_Action
+		dataType: string
+		lineageTag: 8812b4ec-93d7-4c10-a415-ac82eae591e6
+		summarizeBy: none
+		sourceColumn: Recommended_CRM_Action
+
+	partition customer_rfm_promo_segmentation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("d:\\DW- Internship\\Lidl-Loyalty-Data-Analyst\\baltic-retail-loyalty-analytics\\reports\\customer_rfm_promo_segmentation.csv"),[Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{"customer_archetype", type text}, {"Total_Transactions", Int64.Type}, {"Unique_Customers", Int64.Type}, {"Avg_Net_Basket_EUR", type number}, {"Avg_Items_Per_Basket", type number}, {"Coupon_Usage_Rate_Pct", type number}, {"Total_Net_Sales_EUR", type number}, {"Total_Discount_Claimed_EUR", type number}, {"Total_Net_Margin_EUR", type number}, {"Recommended_CRM_Action", type text}})
+				in
+				    ChangedType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,113 @@
+table baltic_executive_country_kpis
+	lineageTag: 1a9982cc-4418-4356-9eec-7f60ea342108
+
+	column Country
+		dataType: string
+		lineageTag: a564e976-d610-4c77-97b9-9d8c28e736e0
+		summarizeBy: none
+		sourceColumn: Country
+
+	column Country_Code
+		dataType: string
+		lineageTag: 6c637ce5-7a9e-4709-a36c-2ea20ed152b3
+		summarizeBy: none
+		sourceColumn: Country_Code
+
+	column Active_Stores
+		dataType: int64
+		lineageTag: d8d30693-d485-4153-876c-79f2b9708deb
+		summarizeBy: sum
+		sourceColumn: Active_Stores
+
+	column Total_Transactions
+		dataType: int64
+		lineageTag: 597956c7-2227-435b-becd-90a769996d9c
+		summarizeBy: sum
+		sourceColumn: Total_Transactions
+
+	column Total_Net_Sales_EUR
+		dataType: double
+		lineageTag: cd498977-74d8-4be3-81bd-c9a9b2713c2e
+		summarizeBy: sum
+		sourceColumn: Total_Net_Sales_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Loyalty_Scan_Share_Pct
+		dataType: double
+		lineageTag: 30e55cff-be4a-447a-9b44-788a5eb37cb0
+		summarizeBy: average
+		sourceColumn: Loyalty_Scan_Share_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Loyalty_Revenue_Share_Pct
+		dataType: double
+		lineageTag: af2e873c-b154-476b-955e-527e938df0f2
+		summarizeBy: average
+		sourceColumn: Loyalty_Revenue_Share_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Basket_Loyalty_EUR
+		dataType: double
+		lineageTag: a6ac4f5a-b948-446a-9ffc-c31df173cf94
+		summarizeBy: average
+		sourceColumn: Avg_Basket_Loyalty_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Basket_Guest_EUR
+		dataType: double
+		lineageTag: e2d102e6-71f1-4c3f-ac11-b1c53e0a5779
+		summarizeBy: average
+		sourceColumn: Avg_Basket_Guest_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Basket_Uplift_EUR
+		dataType: double
+		lineageTag: 096a662c-daa3-49bd-8337-ffb99526ea1d
+		summarizeBy: average
+		sourceColumn: Basket_Uplift_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Basket_Uplift_Pct
+		dataType: double
+		lineageTag: 3f3d07d5-61af-485d-977b-0d1dccb96cbb
+		summarizeBy: average
+		sourceColumn: Basket_Uplift_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Coupon_Redemption_Rate_Pct
+		dataType: double
+		lineageTag: 6d7ca92f-0ba2-4c97-abe2-8df72aaaa42e
+		summarizeBy: average
+		sourceColumn: Coupon_Redemption_Rate_Pct
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Promo_Discount_EUR
+		dataType: double
+		lineageTag: 13bfb615-7fba-4ab9-b08d-41d27c85ba84
+		summarizeBy: sum
+		sourceColumn: Total_Promo_Discount_EUR
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition baltic_executive_country_kpis = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("d:\\DW- Internship\\Lidl-Loyalty-Data-Analyst\\baltic-retail-loyalty-analytics\\reports\\baltic_executive_country_kpis.csv"),[Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{"Country", type text}, {"Country_Code", type text}, {"Active_Stores", Int64.Type}, {"Total_Transactions", Int64.Type}, {"Total_Net_Sales_EUR", type number}, {"Loyalty_Scan_Share_Pct", type number}, {"Loyalty_Revenue_Share_Pct", type number}, {"Avg_Basket_Loyalty_EUR", type number}, {"Avg_Basket_Guest_EUR", type number}, {"Basket_Uplift_EUR", type number}, {"Basket_Uplift_Pct", type number}, {"Coupon_Redemption_Rate_Pct", type number}, {"Total_Promo_Discount_EUR", type number}})
+				in
+				    ChangedType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "v3rfmSeg",
+  "position": {
+    "x": 16,
+    "y": 365,
+    "z": 3000,
+    "height": 330,
+    "width": 620,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "barChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "customer_rfm_promo_segmentation"
+                    }
+                  },
+                  "Property": "customer_archetype"
+                }
+              },
+              "queryRef": "customer_rfm_promo_segmentation.customer_archetype",
+              "nativeQueryRef": "customer_archetype",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "customer_rfm_promo_segmentation"
+                        }
+                      },
+                      "Property": "Avg_Net_Basket_EUR"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(customer_rfm_promo_segmentation.Avg_Net_Basket_EUR)",
+              "nativeQueryRef": "Avg_Net_Basket_EUR"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "customer_rfm_promo_segmentation"
+                      }
+                    },
+                    "Property": "Avg_Net_Basket_EUR"
+                  }
+                },
+                "Function": 0
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'3. Customer RFM Archetypes: Average Net Basket (€)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

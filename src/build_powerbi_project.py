@@ -14,46 +14,12 @@ STATIC_THEME_DIR = os.path.join(RPT_DIR, "StaticResources", "SharedResources", "
 for d in [PBI_DIR, SM_DIR, RPT_DIR, STATIC_THEME_DIR]:
     os.makedirs(d, exist_ok=True)
 
-# Copy CY25SU11.json from existing working PBIX on D: drive
 ref_pbix = r"D:\Google Data Analytics\SQL-Ecommoerce Project\E-Commerce_Churn_&_RFM_Dashboard.pbix"
 if os.path.exists(ref_pbix):
     with zipfile.ZipFile(ref_pbix, "r") as z:
         theme_bytes = z.read("Report/StaticResources/SharedResources/BaseThemes/CY25SU11.json")
         with open(os.path.join(STATIC_THEME_DIR, "CY25SU11.json"), "wb") as tf:
             tf.write(theme_bytes)
-
-print("1. Creating Star Schema Gold CSVs & SQLite Data Warehouse...")
-df_stores = pd.read_csv(os.path.join(BASE_DIR, "data/processed/dim_stores.csv"))
-df_customers = pd.read_csv(os.path.join(BASE_DIR, "data/processed/dim_customers.csv"))
-df_campaigns = pd.read_csv(os.path.join(BASE_DIR, "data/processed/dim_campaigns_coupons.csv"))
-df_raw_sample = pd.read_csv(os.path.join(BASE_DIR, "data/raw/sample_50k_raw_pos_transactions.csv"))
-
-df_gold_fact = df_raw_sample[df_raw_sample["record_status"] == "VALID_POS_SALE"].copy()
-gold_fact_path = os.path.join(BASE_DIR, "data/processed/fact_pos_transactions_gold.csv")
-df_gold_fact.to_csv(gold_fact_path, index=False)
-
-dates = pd.date_range("2026-04-01", "2026-09-30", freq="D")
-df_calendar = pd.DataFrame({
-    "date_key": dates.strftime("%Y-%m-%d"),
-    "year": dates.year,
-    "month_num": dates.month,
-    "month_name": dates.strftime("%B"),
-    "month_short": dates.strftime("%b %Y"),
-    "fiscal_week": np.clip(((dates - pd.to_datetime("2026-04-01")).days // 7 + 1), 1, 26),
-    "day_of_week": dates.strftime("%A"),
-    "is_weekend": dates.weekday.isin([5, 6]).astype(int)
-})
-cal_path = os.path.join(BASE_DIR, "data/processed/dim_calendar.csv")
-df_calendar.to_csv(cal_path, index=False)
-
-db_path = os.path.join(BASE_DIR, "data/processed/baltic_loyalty_warehouse.db")
-conn = sqlite3.connect(db_path)
-df_stores.to_sql("dim_stores", conn, if_exists="replace", index=False)
-df_customers.to_sql("dim_customers", conn, if_exists="replace", index=False)
-df_campaigns.to_sql("dim_campaigns_coupons", conn, if_exists="replace", index=False)
-df_calendar.to_sql("dim_calendar", conn, if_exists="replace", index=False)
-df_gold_fact.to_sql("fact_pos_transactions_gold", conn, if_exists="replace", index=False)
-conn.close()
 
 data_dir_escaped = os.path.join(BASE_DIR, "data", "processed").replace("\\", "\\\\")
 reports_dir_escaped = os.path.join(BASE_DIR, "reports").replace("\\", "\\\\")
@@ -119,6 +85,13 @@ t_country = make_csv_table(
         ("Basket_Uplift_Pct", "double", "type number", "average"),
         ("Coupon_Redemption_Rate_Pct", "double", "type number", "average"),
         ("Total_Promo_Discount_EUR", "double", "type number", "sum")
+    ],
+    measures=[
+        {"name": "Total Baltic Net Sales (€)", "expression": "SUM(baltic_executive_country_kpis[Total_Net_Sales_EUR])", "formatString": "€#,0"},
+        {"name": "Total Validated POS Baskets", "expression": "SUM(baltic_executive_country_kpis[Total_Transactions])", "formatString": "#,0"},
+        {"name": "Loyalty Basket (€)", "expression": "AVERAGE(baltic_executive_country_kpis[Avg_Basket_Loyalty_EUR])", "formatString": "€#,0.00"},
+        {"name": "Guest Basket (€)", "expression": "AVERAGE(baltic_executive_country_kpis[Avg_Basket_Guest_EUR])", "formatString": "€#,0.00"},
+        {"name": "Loyalty Scan Share (%)", "expression": "AVERAGE(baltic_executive_country_kpis[Loyalty_Scan_Share_Pct]) / 100", "formatString": "0.0%"}
     ]
 )
 
@@ -278,39 +251,300 @@ model_bim = {
 with open(os.path.join(SM_DIR, "model.bim"), "w", encoding="utf-8") as f:
     json.dump(model_bim, f, indent=2)
 
-# Build valid report.json with pre-configured visuals on Page 1
-def make_bar_visual(name, x, y, w, h, z, entity, cat_col, val_col, title_text):
-    cfg = {
-        "name": name,
-        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z}}],
+# =====================================================================================
+# BUILD EXECUTIVE-GRADE DARK-NAVY & LIDL-STYLED DASHBOARD CANVAS (report.json)
+# =====================================================================================
+
+# 1. Top Header Banner (Styled Title Card)
+v_header = {
+    "x": 12, "y": 8, "z": 500, "width": 1256, "height": 46,
+    "config": json.dumps({
+        "name": "hdrBanner01",
+        "layouts": [{"id": 0, "position": {"x": 12, "y": 8, "z": 500, "width": 1256, "height": 46, "tabOrder": 500}}],
         "singleVisual": {
-            "visualType": "barChart",
+            "visualType": "textbox",
+            "objects": {
+                "general": [{
+                    "properties": {
+                        "paragraphs": [{
+                            "textRuns": [{
+                                "value": "BALTICPLUS LOYALTY & PROMOTIONAL ANALYTICS — EXECUTIVE BOARD DASHBOARD (LT • LV • EE)",
+                                "textStyle": {"fontWeight": "bold", "fontSize": "15pt", "color": "#FFF000"}
+                            }],
+                            "horizontalTextAlignment": "center"
+                        }]
+                    }
+                }]
+            },
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#002B5C'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFF000'"}}}}}, "width": {"expr": {"Literal": {"Value": "2D"}}}}}]
+            }
+        }
+    })
+}
+
+# 2. Top Row Multi-Metric Executive KPI Card (cardVisual)
+v_kpis = {
+    "x": 12, "y": 60, "z": 1000, "width": 960, "height": 115,
+    "config": json.dumps({
+        "name": "kpiCardsRow01",
+        "layouts": [{"id": 0, "position": {"x": 12, "y": 60, "z": 1000, "width": 960, "height": 115, "tabOrder": 1000}}],
+        "singleVisual": {
+            "visualType": "cardVisual",
             "projections": {
-                "Category": [{"queryRef": f"{entity}.{cat_col}", "active": True}],
-                "Y": [{"queryRef": f"Sum({entity}.{val_col})"}]
+                "Data": [
+                    {"queryRef": "baltic_executive_country_kpis.Total Baltic Net Sales (€)"},
+                    {"queryRef": "baltic_executive_country_kpis.Total Validated POS Baskets"},
+                    {"queryRef": "baltic_executive_country_kpis.Loyalty Scan Share (%)"},
+                    {"queryRef": "baltic_executive_country_kpis.Loyalty Basket (€)"},
+                    {"queryRef": "baltic_executive_country_kpis.Guest Basket (€)"}
+                ]
             },
             "prototypeQuery": {
                 "Version": 2,
-                "From": [{"Name": "t", "Entity": entity, "Type": 0}],
+                "From": [{"Name": "b", "Entity": "baltic_executive_country_kpis", "Type": 0}],
                 "Select": [
-                    {"Column": {"Expression": {"SourceRef": {"Source": "t"}}, "Property": cat_col}, "Name": f"{entity}.{cat_col}", "NativeReferenceName": cat_col},
-                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "t"}}, "Property": val_col}}, "Function": 0}, "Name": f"Sum({entity}.{val_col})", "NativeReferenceName": val_col}
+                    {"Measure": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Total Baltic Net Sales (€)"}, "Name": "baltic_executive_country_kpis.Total Baltic Net Sales (€)", "NativeReferenceName": "Total Net Sales (€)"},
+                    {"Measure": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Total Validated POS Baskets"}, "Name": "baltic_executive_country_kpis.Total Validated POS Baskets", "NativeReferenceName": "Validated Baskets"},
+                    {"Measure": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Loyalty Scan Share (%)"}, "Name": "baltic_executive_country_kpis.Loyalty Scan Share (%)", "NativeReferenceName": "Loyalty Scan %"},
+                    {"Measure": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Loyalty Basket (€)"}, "Name": "baltic_executive_country_kpis.Loyalty Basket (€)", "NativeReferenceName": "Avg Loyalty Basket"},
+                    {"Measure": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Guest Basket (€)"}, "Name": "baltic_executive_country_kpis.Guest Basket (€)", "NativeReferenceName": "Avg Guest Basket"}
+                ]
+            },
+            "drillFilterOtherVisuals": True,
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#0050AA'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
+            }
+        }
+    })
+}
+
+# 3. Top-Right Interactive Baltic Country Filter Slicer
+v_slicer = {
+    "x": 982, "y": 60, "z": 1500, "width": 286, "height": 115,
+    "config": json.dumps({
+        "name": "slicerCountry01",
+        "layouts": [{"id": 0, "position": {"x": 982, "y": 60, "z": 1500, "width": 286, "height": 115, "tabOrder": 1500}}],
+        "singleVisual": {
+            "visualType": "slicer",
+            "projections": {"Values": [{"queryRef": "baltic_executive_country_kpis.Country", "active": True}]},
+            "prototypeQuery": {
+                "Version": 2,
+                "From": [{"Name": "b", "Entity": "baltic_executive_country_kpis", "Type": 0}],
+                "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Country"}, "Name": "baltic_executive_country_kpis.Country", "NativeReferenceName": "Baltic Country"}]
+            },
+            "drillFilterOtherVisuals": True,
+            "objects": {
+                "data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}],
+                "header": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": "'BALTIC MARKET FILTER'"}}}, "bold": {"expr": {"Literal": {"Value": "true"}}}, "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}}}]
+            },
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFF000'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
+            }
+        }
+    })
+}
+
+# 4. Middle-Left: Campaign Pre/Post True Net Incremental ROI (%) with Custom Red/Green/Blue Data Point Colors & Data Labels ON
+camp_color_rules = [
+    ("Baltic Grill & Fresh Meat -20% Weekend", "#003876"),
+    ("Fresh Bananas & Berries -25% App Deal", "#003876"),
+    ("Baltic Fresh Bakery -30% App Coupon", "#003876"),
+    ("Private Label Dairy & Cheese -20%", "#1E824C"),
+    ("Spend €30 Get €3 Off Weekend Basket", "#0050AA"),
+    ("Organic & BIO Range -25% Green Week", "#1E824C"),
+    ("Digital Scratch Card €1.50 Instant Reward", "#28A197"),
+    ("Inactive 21-Day Win-Back €4 Off €25", "#28A197"),
+    ("Spend €40 Get €5 Off Family Stock-Up", "#0050AA"),
+    ("Imported Coffee Beans XXL -35% Promo", "#D92B2B"),
+    ("Household Detergent XXL -40% Coupon", "#D92B2B"),
+    ("Cooking Oil 2L 1+1 Free App Coupon", "#D92B2B")
+]
+dp_camp = []
+for cname, hex_c in camp_color_rules:
+    dp_camp.append({
+        "properties": {"fill": {"solid": {"color": {"expr": {"Literal": {"Value": f"'{hex_c}'"}}}}}},
+        "selector": {"data": [{"scopeId": {"Comparison": {"ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "campaign_pre_post_incrementality_roi"}}, "Property": "campaign_name"}}, "Right": {"Literal": {"Value": f"'{cname}'"}}}}}]}
+    })
+
+v_camp_roi = {
+    "x": 12, "y": 184, "z": 2000, "width": 680, "height": 270,
+    "config": json.dumps({
+        "name": "v1campRoiStyled",
+        "layouts": [{"id": 0, "position": {"x": 12, "y": 184, "z": 2000, "width": 680, "height": 270, "tabOrder": 2000}}],
+        "singleVisual": {
+            "visualType": "clusteredBarChart",
+            "projections": {
+                "Category": [{"queryRef": "campaign_pre_post_incrementality_roi.campaign_name", "active": True}],
+                "Y": [{"queryRef": "Sum(campaign_pre_post_incrementality_roi.Net_Campaign_ROI_Pct)"}]
+            },
+            "prototypeQuery": {
+                "Version": 2,
+                "From": [{"Name": "c", "Entity": "campaign_pre_post_incrementality_roi", "Type": 0}],
+                "Select": [
+                    {"Column": {"Expression": {"SourceRef": {"Source": "c"}}, "Property": "campaign_name"}, "Name": "campaign_pre_post_incrementality_roi.campaign_name", "NativeReferenceName": "Campaign"},
+                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "c"}}, "Property": "Net_Campaign_ROI_Pct"}}, "Function": 0}, "Name": "Sum(campaign_pre_post_incrementality_roi.Net_Campaign_ROI_Pct)", "NativeReferenceName": "True Net ROI (%)"}
                 ],
-                "OrderBy": [{"Direction": 2, "Expression": {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "t"}}, "Property": val_col}}, "Function": 0}}}]
+                "OrderBy": [{"Direction": 2, "Expression": {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "c"}}, "Property": "Net_Campaign_ROI_Pct"}}, "Function": 0}}}]
             },
             "drillFilterOtherVisuals": True,
             "hasDefaultSort": True,
+            "objects": {
+                "categoryAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "false"}}}}}],
+                "valueAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "false"}}}, "gridlineShow": {"expr": {"Literal": {"Value": "true"}}}}}],
+                "labels": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "enableDetailDataLabel": {"expr": {"Literal": {"Value": "false"}}}}}],
+                "dataPoint": dp_camp
+            },
             "vcObjects": {
-                "title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": f"'{title_text}'"}}} }}]
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": "'1. Campaign Pre/Post True Net Incremental ROI (%) — Winners vs. Cherry-Picked Losses'"}}}, "bold": {"expr": {"Literal": {"Value": "true"}}}, "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "alignment": {"expr": {"Literal": {"Value": "'center'"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
             }
         }
-    }
-    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(cfg)}
+    })
+}
 
-v1 = make_bar_visual("v1campRoi", 16, 20, 620, 330, 1000, "campaign_pre_post_incrementality_roi", "campaign_name", "Net_Campaign_ROI_Pct", "1. Campaign Pre/Post True Net Incremental ROI (%)")
-v2 = make_bar_visual("v2balticSales", 650, 20, 610, 330, 2000, "baltic_executive_country_kpis", "Country", "Avg_Basket_Loyalty_EUR", "2. Baltic Average Loyalty Basket Value (€) by Country")
-v3 = make_bar_visual("v3rfmSeg", 16, 365, 620, 330, 3000, "customer_rfm_promo_segmentation", "customer_archetype", "Avg_Net_Basket_EUR", "3. Customer RFM Archetypes: Average Net Basket (€)")
-v4 = make_bar_visual("v4funnel", 650, 365, 610, 330, 4000, "loyalty_app_customer_journey_funnel", "Funnel_Stage", "Users_Count", "4. Loyalty App Customer Journey Funnel (50,000 Members)")
+# 5. Middle-Right: Clustered Column Chart Comparing Avg Loyalty Basket (€) vs Avg Guest Basket (€) by Country
+v_baltic_col = {
+    "x": 702, "y": 184, "z": 2500, "width": 566, "height": 270,
+    "config": json.dumps({
+        "name": "v2balticColComparison",
+        "layouts": [{"id": 0, "position": {"x": 702, "y": 184, "z": 2500, "width": 566, "height": 270, "tabOrder": 2500}}],
+        "singleVisual": {
+            "visualType": "clusteredColumnChart",
+            "projections": {
+                "Category": [{"queryRef": "baltic_executive_country_kpis.Country", "active": True}],
+                "Y": [
+                    {"queryRef": "Sum(baltic_executive_country_kpis.Avg_Basket_Loyalty_EUR)"},
+                    {"queryRef": "Sum(baltic_executive_country_kpis.Avg_Basket_Guest_EUR)"}
+                ]
+            },
+            "prototypeQuery": {
+                "Version": 2,
+                "From": [{"Name": "b", "Entity": "baltic_executive_country_kpis", "Type": 0}],
+                "Select": [
+                    {"Column": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Country"}, "Name": "baltic_executive_country_kpis.Country", "NativeReferenceName": "Country"},
+                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Avg_Basket_Loyalty_EUR"}}, "Function": 0}, "Name": "Sum(baltic_executive_country_kpis.Avg_Basket_Loyalty_EUR)", "NativeReferenceName": "Loyalty App Basket (€)"},
+                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Avg_Basket_Guest_EUR"}}, "Function": 0}, "Name": "Sum(baltic_executive_country_kpis.Avg_Basket_Guest_EUR)", "NativeReferenceName": "Non-Loyalty Guest Basket (€)"}
+                ],
+                "OrderBy": [{"Direction": 2, "Expression": {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "b"}}, "Property": "Avg_Basket_Loyalty_EUR"}}, "Function": 0}}}]
+            },
+            "drillFilterOtherVisuals": True,
+            "hasDefaultSort": True,
+            "objects": {
+                "categoryAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "false"}}}}}],
+                "valueAxis": [{"properties": {"showAxisTitle": {"expr": {"Literal": {"Value": "false"}}}}}],
+                "labels": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
+                "dataPoint": [
+                    {"properties": {"fill": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}}, "selector": {"metadata": "Sum(baltic_executive_country_kpis.Avg_Basket_Loyalty_EUR)"}},
+                    {"properties": {"fill": {"solid": {"color": {"expr": {"Literal": {"Value": "'#F39C12'"}}}}}}, "selector": {"metadata": "Sum(baltic_executive_country_kpis.Avg_Basket_Guest_EUR)"}}
+                ]
+            },
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": "'2. Baltic Basket Uplift: Loyalty App (€29.3) vs. Guest (€16.4)'"}}}, "bold": {"expr": {"Literal": {"Value": "true"}}}, "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "alignment": {"expr": {"Literal": {"Value": "'center'"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
+            }
+        }
+    })
+}
+
+# 6. Bottom-Left: Donut Chart of Revenue Share by Customer RFM Segment (€)
+rfm_colors = [
+    ("Core Weekly Loyal", "#003876"),
+    ("VIP Full-Basket Family", "#1E824C"),
+    ("Promo-Driven Cherry Picker", "#D92B2B"),
+    ("At-Risk / Slipping", "#F39C12"),
+    ("Single-Category Shopper", "#5F9EA0")
+]
+dp_rfm = []
+for sname, hex_c in rfm_colors:
+    dp_rfm.append({
+        "properties": {"fill": {"solid": {"color": {"expr": {"Literal": {"Value": f"'{hex_c}'"}}}}}},
+        "selector": {"data": [{"scopeId": {"Comparison": {"ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "customer_rfm_promo_segmentation"}}, "Property": "customer_archetype"}}, "Right": {"Literal": {"Value": f"'{sname}'"}}}}}]}
+    })
+
+v_rfm_donut = {
+    "x": 12, "y": 462, "z": 3000, "width": 615, "height": 248,
+    "config": json.dumps({
+        "name": "v3rfmDonutChart",
+        "layouts": [{"id": 0, "position": {"x": 12, "y": 462, "z": 3000, "width": 615, "height": 248, "tabOrder": 3000}}],
+        "singleVisual": {
+            "visualType": "donutChart",
+            "projections": {
+                "Category": [{"queryRef": "customer_rfm_promo_segmentation.customer_archetype", "active": True}],
+                "Y": [{"queryRef": "Sum(customer_rfm_promo_segmentation.Total_Net_Sales_EUR)"}]
+            },
+            "prototypeQuery": {
+                "Version": 2,
+                "From": [{"Name": "r", "Entity": "customer_rfm_promo_segmentation", "Type": 0}],
+                "Select": [
+                    {"Column": {"Expression": {"SourceRef": {"Source": "r"}}, "Property": "customer_archetype"}, "Name": "customer_rfm_promo_segmentation.customer_archetype", "NativeReferenceName": "RFM Segment"},
+                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "r"}}, "Property": "Total_Net_Sales_EUR"}}, "Function": 0}, "Name": "Sum(customer_rfm_promo_segmentation.Total_Net_Sales_EUR)", "NativeReferenceName": "Net Sales (€)"}
+                ],
+                "OrderBy": [{"Direction": 2, "Expression": {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "r"}}, "Property": "Total_Net_Sales_EUR"}}, "Function": 0}}}]
+            },
+            "drillFilterOtherVisuals": True,
+            "hasDefaultSort": True,
+            "objects": {
+                "dataPoint": dp_rfm,
+                "labels": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
+                "legend": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}]
+            },
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": "'3. Loyalty Revenue Share (€) by Customer RFM & Promo Segment'"}}}, "bold": {"expr": {"Literal": {"Value": "true"}}}, "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "alignment": {"expr": {"Literal": {"Value": "'center'"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
+            }
+        }
+    })
+}
+
+# 7. Bottom-Right: Loyalty App Customer Journey Conversion Funnel (funnel visual)
+v_funnel_chart = {
+    "x": 638, "y": 462, "z": 4000, "width": 630, "height": 248,
+    "config": json.dumps({
+        "name": "v4funnelChart",
+        "layouts": [{"id": 0, "position": {"x": 638, "y": 462, "z": 4000, "width": 630, "height": 248, "tabOrder": 4000}}],
+        "singleVisual": {
+            "visualType": "funnel",
+            "projections": {
+                "Category": [{"queryRef": "loyalty_app_customer_journey_funnel.Funnel_Stage", "active": True}],
+                "Y": [{"queryRef": "Sum(loyalty_app_customer_journey_funnel.Users_Count)"}]
+            },
+            "prototypeQuery": {
+                "Version": 2,
+                "From": [{"Name": "f", "Entity": "loyalty_app_customer_journey_funnel", "Type": 0}],
+                "Select": [
+                    {"Column": {"Expression": {"SourceRef": {"Source": "f"}}, "Property": "Funnel_Stage"}, "Name": "loyalty_app_customer_journey_funnel.Funnel_Stage", "NativeReferenceName": "Journey Stage"},
+                    {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "f"}}, "Property": "Users_Count"}}, "Function": 0}, "Name": "Sum(loyalty_app_customer_journey_funnel.Users_Count)", "NativeReferenceName": "Active Members"}
+                ],
+                "OrderBy": [{"Direction": 2, "Expression": {"Aggregation": {"Expression": {"Column": {"Expression": {"SourceRef": {"Source": "f"}}, "Property": "Users_Count"}}, "Function": 0}}}]
+            },
+            "drillFilterOtherVisuals": True,
+            "hasDefaultSort": True,
+            "objects": {
+                "labels": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}}],
+                "dataPoint": [{"properties": {"fill": {"solid": {"color": {"expr": {"Literal": {"Value": "'#0050AA'"}}}}}}}]
+            },
+            "vcObjects": {
+                "background": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#FFFFFF'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+                "title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": "'4. Loyalty App Customer Journey Funnel (50,000 Registered Members)'"}}}, "bold": {"expr": {"Literal": {"Value": "true"}}}, "fontColor": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "alignment": {"expr": {"Literal": {"Value": "'center'"}}}}}],
+                "border": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}, "color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#003876'"}}}}}, "width": {"expr": {"Literal": {"Value": "3D"}}}}}]
+            }
+        }
+    })
+}
+
+section_config = {
+    "objects": {
+        "background": [{"properties": {"color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#0B2239'"}}}}}, "transparency": {"expr": {"Literal": {"Value": "0D"}}}}}],
+        "outspace": [{"properties": {"color": {"solid": {"color": {"expr": {"Literal": {"Value": "'#071726'"}}}}}}}]
+    }
+}
 
 report_json = {
     "id": 0,
@@ -331,8 +565,8 @@ report_json = {
             "displayName": "Baltic Loyalty Executive Dashboard",
             "filters": "[]",
             "ordinal": 0,
-            "visualContainers": [v1, v2, v3, v4],
-            "config": "{}",
+            "visualContainers": [v_header, v_kpis, v_slicer, v_camp_roi, v_baltic_col, v_rfm_donut, v_funnel_chart],
+            "config": json.dumps(section_config),
             "displayOption": 1,
             "width": 1280,
             "height": 720
@@ -345,4 +579,4 @@ report_json = {
 with open(os.path.join(RPT_DIR, "report.json"), "w", encoding="utf-8") as f:
     json.dump(report_json, f, indent=2)
 
-print("Updated Power BI Project (.pbip) with full report.json visuals and powerBI_V3 model.bim!")
+print("Executive Lidl-Branded Dark-Navy Power BI Dashboard layout (report.json) built successfully!")
