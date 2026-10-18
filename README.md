@@ -10,6 +10,8 @@
 > **Author:** Debbrata Kumar Adhikary (Data Analyst — Vilnius, Lithuania)  
 > **Scope:** 140 Baltic Retail Stores (87 Lithuania • 30 Latvia • 23 Estonia) | 50,000 Loyalty App Members | 528,390 Raw POS Records → 520,000 Validated Gold Baskets (€13.08M Net Sales)
 
+![Power BI Executive Dashboard Overview](assets/charts/00_powerbi_executive_dashboard_preview.png)
+
 ---
 
 ## 1. Executive Summary & Business Problem
