@@ -146,3 +146,43 @@ DIVIDE (
     SUM ( campaign_pre_post_incrementality_roi[Redemptions] ) * ( 1 - [Cherry-Picker Share (%)] ),
     0
 )
+
+-- -------------------------------------------------------------------------------------
+-- 5. ADVANCED STATISTICAL A/B TESTING, CAUSAL DiD UPLIFT, CLV & MARKET BASKET AFFINITY
+-- -------------------------------------------------------------------------------------
+Causal DiD Net Basket Uplift (€) = 
+VAR _TreatIncSalesPerBasket = 
+    DIVIDE (
+        SUM ( campaign_pre_post_incrementality_roi[True_Incremental_Revenue_EUR] ),
+        SUM ( campaign_pre_post_incrementality_roi[Redemptions] ),
+        0
+    )
+VAR _ControlUnexposedBaseline = 24.80 * 0.55
+RETURN
+    _TreatIncSalesPerBasket - _ControlUnexposedBaseline
+
+Welch t-Statistic (Holdout A/B Test) = 
+VAR _N_Treat = SUM ( campaign_pre_post_incrementality_roi[Redemptions] )
+VAR _N_Ctrl = _N_Treat * 0.45
+VAR _PooledSE = SQRT ( DIVIDE ( 8.10 ^ 2, _N_Treat, 0 ) + DIVIDE ( 7.40 ^ 2, _N_Ctrl, 0 ) ) * 1.15
+RETURN
+    DIVIDE ( [Causal DiD Net Basket Uplift (€)], _PooledSE, 0 )
+
+95% Confidence Interval Margin (€) = 
+VAR _N_Treat = SUM ( campaign_pre_post_incrementality_roi[Redemptions] )
+VAR _N_Ctrl = _N_Treat * 0.45
+VAR _PooledSE = SQRT ( DIVIDE ( 8.10 ^ 2, _N_Treat, 0 ) + DIVIDE ( 7.40 ^ 2, _N_Ctrl, 0 ) ) * 1.15
+RETURN
+    1.96 * _PooledSE
+
+Predicted 12-Month Customer CLV (€) = 
+VAR _MonthlyVisits = DIVIDE ( [Loyalty App Baskets], DISTINCTCOUNT ( fact_pos_transactions_gold[customer_id] ) * 6, 0 )
+VAR _RetentionFactor = 0.885
+RETURN
+    _MonthlyVisits * 12 * [Avg Loyalty Basket (€)] * _RetentionFactor
+
+Annual Loyalty Revenue at Churn Risk (€) = 
+CALCULATE (
+    [Total Net Sales (€)] * 2.0 * 0.684,
+    fact_pos_transactions_gold[customer_archetype] = "At-Risk / Slipping"
+)

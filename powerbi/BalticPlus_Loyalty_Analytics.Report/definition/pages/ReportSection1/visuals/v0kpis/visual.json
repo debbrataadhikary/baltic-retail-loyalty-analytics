@@ -140,7 +140,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'BALTIC EXECUTIVE KPI OVERVIEW (NET SALES € • VALIDATED BASKETS • ACTIVE STORES • PROMO SPEND €)'"
+                  "Value": "'BALTIC EXECUTIVE KPI OVERVIEW (NET SALES \u20ac \u2022 VALIDATED BASKETS \u2022 ACTIVE STORES \u2022 PROMO SPEND \u20ac)'"
                 }
               }
             },

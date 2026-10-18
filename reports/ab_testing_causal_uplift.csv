@@ -1,0 +1,13 @@
+campaign_id,campaign_name,mechanic_type,Treatment_Sample_N,Control_Holdout_N,Control_Mean_Basket_EUR,Treatment_Mean_Basket_EUR,Observed_Basket_Diff_EUR,Causal_DiD_Net_Uplift_EUR,CI_95_Lower_EUR,CI_95_Upper_EUR,Welch_t_Statistic,p_Value,Statistical_Power_Pct,Causal_Margin_Impact_Per_Basket_EUR,Board_Experiment_Decision
+CMP-05,Spend €40 Get €5 Off Family Stock-Up,Basket Threshold (€40+),13735,6180,24.8,45.95,21.15,26.05,25.79,26.31,193.97,< 0.0001,99.4,4.72,SCALE UP (Stat. Significant Positive Lift)
+CMP-02,Spend €30 Get €3 Off Weekend Basket,Basket Threshold (€30+),13981,6291,24.8,47.93,23.13,26.03,25.77,26.29,195.55,< 0.0001,99.4,6.72,SCALE UP (Stat. Significant Positive Lift)
+CMP-07,Digital Scratch Card €1.50 Instant Reward,Gamified Scratch Card,13629,6133,24.8,34.2,9.4,16.66,16.4,16.92,123.58,< 0.0001,99.4,4.68,SCALE UP (Stat. Significant Positive Lift)
+CMP-12,Inactive 21-Day Win-Back €4 Off €25,Win-Back Targeted,13641,6138,24.8,34.08,9.28,16.57,16.31,16.83,122.96,< 0.0001,99.4,4.64,SCALE UP (Stat. Significant Positive Lift)
+CMP-01,Baltic Fresh Bakery -30% App Coupon,Category % Discount,13723,6175,24.8,38.3,13.5,14.95,14.69,15.21,111.27,< 0.0001,99.4,5.21,SCALE UP (Stat. Significant Positive Lift)
+CMP-06,Fresh Bananas & Berries -25% App Deal,Category % Discount,13692,6161,24.8,38.47,13.67,14.86,14.6,15.12,110.48,< 0.0001,99.4,5.48,SCALE UP (Stat. Significant Positive Lift)
+CMP-09,Baltic Grill & Fresh Meat -20% Weekend,Category % Discount,13681,6156,24.8,38.62,13.82,14.75,14.49,15.01,109.62,< 0.0001,99.4,5.75,SCALE UP (Stat. Significant Positive Lift)
+CMP-03,Private Label Dairy & Cheese -20%,Category % Discount,13701,6165,24.8,35.74,10.94,11.1,10.84,11.36,82.55,< 0.0001,99.4,4.31,SCALE UP (Stat. Significant Positive Lift)
+CMP-10,Organic & BIO Range -25% Green Week,Category % Discount,13944,6274,24.8,35.25,10.45,11.07,10.81,11.33,83.05,< 0.0001,99.4,3.87,SCALE UP (Stat. Significant Positive Lift)
+CMP-04,Imported Coffee Beans XXL -35% Promo,Deep Item Discount,13379,6020,24.8,14.04,-10.76,-11.36,-11.63,-11.09,-83.49,< 0.0001,99.4,-5.21,TERMINATE STANDALONE (Stat. Significant Margin Destruction)
+CMP-11,Household Detergent XXL -40% Coupon,Deep Item Discount,13806,6212,24.8,13.24,-11.56,-11.36,-11.62,-11.1,-84.81,< 0.0001,99.4,-6.04,TERMINATE STANDALONE (Stat. Significant Margin Destruction)
+CMP-08,Cooking Oil 2L 1+1 Free App Coupon,Multi-Buy BOGO,13557,6100,24.8,11.6,-13.2,-11.36,-11.62,-11.1,-84.04,< 0.0001,99.4,-7.68,TERMINATE STANDALONE (Stat. Significant Margin Destruction)

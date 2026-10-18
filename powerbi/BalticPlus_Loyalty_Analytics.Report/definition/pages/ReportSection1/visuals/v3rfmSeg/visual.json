@@ -324,7 +324,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'3. Loyalty Revenue Share (€) by Customer RFM & Promo Segment'"
+                  "Value": "'3. Loyalty Revenue Share (\u20ac) by Customer RFM & Promo Segment'"
                 }
               }
             },

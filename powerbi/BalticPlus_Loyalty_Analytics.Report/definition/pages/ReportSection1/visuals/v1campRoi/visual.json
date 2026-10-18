@@ -291,7 +291,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Spend €30 Get €3 Off Weekend Basket'"
+                        "Value": "'Spend \u20ac30 Get \u20ac3 Off Weekend Basket'"
                       }
                     }
                   }
@@ -373,7 +373,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Digital Scratch Card €1.50 Instant Reward'"
+                        "Value": "'Digital Scratch Card \u20ac1.50 Instant Reward'"
                       }
                     }
                   }
@@ -414,7 +414,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Inactive 21-Day Win-Back €4 Off €25'"
+                        "Value": "'Inactive 21-Day Win-Back \u20ac4 Off \u20ac25'"
                       }
                     }
                   }
@@ -455,7 +455,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Spend €40 Get €5 Off Family Stock-Up'"
+                        "Value": "'Spend \u20ac40 Get \u20ac5 Off Family Stock-Up'"
                       }
                     }
                   }
@@ -634,7 +634,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'1. Campaign Pre/Post True Net Incremental ROI (%) — Winners vs. Cherry-Picked Losses'"
+                  "Value": "'1. Campaign Pre/Post True Net Incremental ROI (%) \u2014 Winners vs. Cherry-Picked Losses'"
                 }
               }
             },

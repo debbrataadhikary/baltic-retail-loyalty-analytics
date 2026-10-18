@@ -1,0 +1,8 @@
+Rule_ID,Anchor_Promo_Category,Attached_Halo_Category,Support_Pct,Confidence_Pct,Lift_Ratio,Avg_Attached_Halo_Spend_EUR,Avg_Attached_Margin_EUR,Recommended_App_Bundle_Mechanic
+MBA-01,Fresh Bakery (In-Store Oven),"Dairy, Butter & Fresh Cheese",28.4,68.2,3.12,9.45,2.65,Pair -25% Bakery App Coupon with 'Buy 2 Private Label Cheeses Get €1 Off'
+MBA-02,Fresh Meat & Poultry (Weekend Grill),"Fresh Fruit, Salad & Craft Beverages",22.1,64.5,2.88,14.2,3.82,Trigger Weekend Grill Cross-Coupon: Spend €15 on Meat + Produce for +€2.50 Off
+MBA-03,Fresh Bananas & Berries,Organic & BIO Yogurt / Breakfast Cereals,19.8,58.0,2.64,8.9,2.48,Target Single-Category Fruit Shoppers with BIO Breakfast Cross-Sell Push
+MBA-04,Private Label Dairy & Eggs,Fresh Bakery & Packaged Deli Meats,31.2,61.4,2.45,10.6,2.85,Core Weekly Habit Anchor: Keep High Availability in Digital Scratch Card Rewards
+MBA-05,Organic & BIO Range,"Premium Nuts, Dried Fruit & Plant Milk",11.5,52.8,2.31,11.8,3.3,High-Margin VIP Segment Bundle: Spend €20 on BIO Range Get €3 Off
+MBA-06,Imported Coffee Beans XXL (-35%),No Consistent Attachment (Standalone Cherry-Pick),9.4,14.2,0.78,2.85,-2.1,LOW AFFINITY (Lift < 1.0): Never Discount Standalone; Gate Behind €30 Total Basket
+MBA-07,Cooking Oil 2L 1+1 Free,No Consistent Attachment (Stockpiled Staple),8.1,11.8,0.69,2.4,-3.45,NEGATIVE HALO (Lift 0.69): Eliminate BOGO; Replace with Multi-Category Spend Tier

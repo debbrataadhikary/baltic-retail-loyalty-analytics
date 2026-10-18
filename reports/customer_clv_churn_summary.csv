@@ -1,0 +1,6 @@
+customer_archetype,Active_Members,Avg_Purchase_Frequency_Monthly,Avg_Net_Basket_EUR,Avg_Days_Since_Last_Scan,Churn_Probability_30d_Pct,Predicted_12M_CLV_EUR,Predicted_12M_Net_Margin_EUR,Annual_Revenue_At_Risk_EUR,Predictive_Model_Trigger
+VIP Full-Basket Family,9000,5.8,53.03,4.2,6.4,3480.0,782.5,200448.0,Low Churn Risk: Enroll in Tier-1 Partner Perks & Zero-Discount Brand Advocacy
+Core Weekly Loyal,17000,4.3,34.81,6.8,14.2,1695.0,368.4,409173.0,Moderate Risk: Trigger €35 Basket Stretch Coupon if Scan Gap Exceeds 10 Days
+Single-Category Shopper,7000,2.9,19.65,11.5,31.8,612.0,131.2,136231.0,Medium Risk: Push Cross-Category Affinity Bundle (Bakery + Dairy -20%)
+Promo-Driven Cherry Picker,11000,3.4,17.59,9.4,44.5,584.0,42.1,285868.0,Low Margin Retention: Restrict Standalone Deep Discounts; Enforce €20 Basket Floor
+At-Risk / Slipping,6000,1.4,23.43,21.8,68.4,392.0,81.9,160876.0,CRITICAL CHURN ALERT (>65%): Automated 18-Day Push 'Spend €25 Get €4 Off' Win-Back
