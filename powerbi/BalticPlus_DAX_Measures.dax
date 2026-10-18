@@ -1,0 +1,148 @@
+-- =====================================================================================
+-- BALTICPLUS LOYALTY & PROMOTIONAL ANALYTICS — POWER BI DAX MEASURES LIBRARY
+-- Target Model: BalticPlus_Loyalty_Analytics (Star Schema)
+-- Author: Debbrata Kumar Adhikary (Vilnius, Lithuania)
+-- =====================================================================================
+
+-- -------------------------------------------------------------------------------------
+-- 1. CORE POS SALES & BASKET METRICS
+-- -------------------------------------------------------------------------------------
+Total Net Sales (€) = 
+SUM ( fact_pos_transactions_gold[net_sales_eur] )
+
+Total Gross Basket (€) = 
+SUM ( fact_pos_transactions_gold[gross_basket_eur] )
+
+Total Promo Discount Spend (€) = 
+SUM ( fact_pos_transactions_gold[discount_amount_eur] )
+
+Total Net Margin (€) = 
+SUM ( fact_pos_transactions_gold[net_margin_eur] )
+
+Total Validated Baskets = 
+DISTINCTCOUNT ( fact_pos_transactions_gold[transaction_id] )
+
+Average Net Basket (€) = 
+DIVIDE ( [Total Net Sales (€)], [Total Validated Baskets], 0 )
+
+Average Items per Basket = 
+AVERAGE ( fact_pos_transactions_gold[items_count] )
+
+
+-- -------------------------------------------------------------------------------------
+-- 2. LOYALTY APP PENETRATION & BASKET UPLIFT METRICS
+-- -------------------------------------------------------------------------------------
+Loyalty App Baskets = 
+CALCULATE (
+    [Total Validated Baskets],
+    fact_pos_transactions_gold[is_loyalty_scan] = 1
+)
+
+Non-Loyalty Guest Baskets = 
+CALCULATE (
+    [Total Validated Baskets],
+    fact_pos_transactions_gold[is_loyalty_scan] = 0
+)
+
+Loyalty Scan Penetration (%) = 
+DIVIDE ( [Loyalty App Baskets], [Total Validated Baskets], 0 )
+
+Loyalty Revenue Share (%) = 
+DIVIDE (
+    CALCULATE ( [Total Net Sales (€)], fact_pos_transactions_gold[is_loyalty_scan] = 1 ),
+    [Total Net Sales (€)],
+    0
+)
+
+Avg Loyalty Basket (€) = 
+CALCULATE (
+    [Average Net Basket (€)],
+    fact_pos_transactions_gold[is_loyalty_scan] = 1
+)
+
+Avg Guest Basket (€) = 
+CALCULATE (
+    [Average Net Basket (€)],
+    fact_pos_transactions_gold[is_loyalty_scan] = 0
+)
+
+Loyalty Basket Uplift (€) = 
+[Avg Loyalty Basket (€)] - [Avg Guest Basket (€)]
+
+Loyalty Basket Uplift (%) = 
+DIVIDE ( [Loyalty Basket Uplift (€)], [Avg Guest Basket (€)], 0 )
+
+
+-- -------------------------------------------------------------------------------------
+-- 3. CAMPAIGN PRE/POST INCREMENTALITY, CANNIBALIZATION & HALO EFFECT
+-- -------------------------------------------------------------------------------------
+Coupon Redemptions Count = 
+CALCULATE (
+    [Total Validated Baskets],
+    fact_pos_transactions_gold[coupon_applied] = 1
+)
+
+Coupon Redemption Rate (% of Loyalty Scans) = 
+DIVIDE ( [Coupon Redemptions Count], [Loyalty App Baskets], 0 )
+
+Avg Promo Item Spend (€) = 
+CALCULATE (
+    AVERAGE ( fact_pos_transactions_gold[promo_item_spend_eur] ),
+    fact_pos_transactions_gold[coupon_applied] = 1
+)
+
+Avg Attached Non-Promo Halo Spend (€) = 
+CALCULATE (
+    AVERAGE ( fact_pos_transactions_gold[non_promo_halo_spend_eur] ),
+    fact_pos_transactions_gold[coupon_applied] = 1
+)
+
+Basket Halo Multiplier = 
+DIVIDE ( [Avg Attached Non-Promo Halo Spend (€)], [Avg Promo Item Spend (€)], 0 )
+
+Cherry-Picker Baskets Count = 
+CALCULATE (
+    [Total Validated Baskets],
+    fact_pos_transactions_gold[coupon_applied] = 1,
+    fact_pos_transactions_gold[non_promo_halo_spend_eur] < 5.00
+)
+
+Cherry-Picker Share (%) = 
+DIVIDE ( [Cherry-Picker Baskets Count], [Coupon Redemptions Count], 0 )
+
+True Incremental Revenue (€) = 
+SUM ( campaign_pre_post_incrementality_roi[True_Incremental_Revenue_EUR] )
+
+Net Incremental Margin (€) = 
+SUM ( campaign_pre_post_incrementality_roi[Net_Incremental_Margin_EUR] )
+
+True Net Campaign ROI (%) = 
+DIVIDE (
+    SUM ( campaign_pre_post_incrementality_roi[Net_Incremental_Margin_EUR] ),
+    SUM ( campaign_pre_post_incrementality_roi[Total_Discount_Cost_EUR] ),
+    0
+)
+
+
+-- -------------------------------------------------------------------------------------
+-- 4. STRATEGIC PROMOTIONAL BUDGET PLANNING & EXPENSE TRACKING
+-- -------------------------------------------------------------------------------------
+Planned Promo Budget (€) = 
+SUM ( dim_campaigns_coupons[planned_budget_eur] )
+
+Promo Budget Utilization (%) = 
+DIVIDE (
+    SUM ( campaign_pre_post_incrementality_roi[Total_Discount_Cost_EUR] ),
+    [Planned Promo Budget (€)],
+    0
+)
+
+Promo Budget Variance (€) = 
+[Planned Promo Budget (€)] - SUM ( campaign_pre_post_incrementality_roi[Total_Discount_Cost_EUR] )
+
+Cost per Incremental Visit (€) = 
+DIVIDE (
+    SUM ( campaign_pre_post_incrementality_roi[Total_Discount_Cost_EUR] ),
+    SUM ( campaign_pre_post_incrementality_roi[Redemptions] ) * ( 1 - [Cherry-Picker Share (%)] ),
+    0
+)

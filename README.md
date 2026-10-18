@@ -91,40 +91,103 @@ Raw retail POS logs contain terminal and cashier anomalies that distort basket a
 
 ---
 
-## 6. Repository Structure & Deliverables
+## 6. Power BI Star Schema Semantic Model, Power Query (M) & DAX Library (`powerbi/`)
+
+To support interactive self-service BI for the **Lidl Baltics Customer Department**, this repository includes a complete **Power BI Developer Project (`powerbi/BalticPlus_Loyalty_Analytics.pbip`)**, a **Tabular Semantic Model (`model.bim`)**, a **Power Query (M) POS Data Connector (`PowerQuery_M_StarSchema_Connector.pq`)**, a **22-Measure DAX Library (`BalticPlus_DAX_Measures.dax`)**, and a **Custom Lidl Corporate Theme (`Lidl_Baltics_Corporate_Theme.json`)** connected to our local Star Schema CSVs and SQLite Warehouse (`data/processed/baltic_loyalty_warehouse.db`).
+
+```mermaid
+erDiagram
+    dim_stores ||--o{ fact_pos_transactions_gold : "store_id (1:*)"
+    dim_campaigns_coupons ||--o{ fact_pos_transactions_gold : "campaign_id (1:*)"
+    dim_calendar ||--o{ fact_pos_transactions_gold : "date_key (1:*)"
+    dim_customers ||--o{ fact_pos_transactions_gold : "customer_id (1:*)"
+
+    dim_stores {
+        string store_id PK
+        string country
+        string country_code
+        string city
+        string store_format
+        int opening_year
+    }
+    dim_campaigns_coupons {
+        string campaign_id PK
+        string campaign_name
+        string mechanic_type
+        string target_category
+        double nominal_discount_pct
+        double planned_budget_eur
+        string commercial_classification
+    }
+    dim_calendar {
+        string date_key PK
+        int year
+        int month_num
+        string month_name
+        int fiscal_week
+        string day_of_week
+        int is_weekend
+    }
+    fact_pos_transactions_gold {
+        string transaction_id PK
+        string transaction_date FK
+        string store_id FK
+        string customer_id FK
+        string campaign_id FK
+        int is_loyalty_scan
+        int coupon_applied
+        int items_count
+        double promo_item_spend_eur
+        double non_promo_halo_spend_eur
+        double gross_basket_eur
+        double discount_amount_eur
+        double net_sales_eur
+        double net_margin_eur
+    }
+```
+
+### Key Power BI Artifacts Included:
+- **`powerbi/BalticPlus_Loyalty_Analytics.pbip` & `BalticPlus_Loyalty_Analytics.SemanticModel/model.bim`:** Git-friendly Power BI Project and Tabular Model with pre-configured `1:*` Star Schema relationships (`dim_stores`, `dim_campaigns_coupons`, `dim_calendar` $\rightarrow$ `fact_pos_transactions_gold`) and embedded DAX measures.
+- **`powerbi/BalticPlus_DAX_Measures.dax`:** 22 production DAX measures covering *Loyalty Scan Penetration (%)*, *Loyalty Basket Uplift (€ / %)*, *Avg Attached Non-Promo Halo Spend (€)*, *Cherry-Picker Share (%)*, *True Net Campaign ROI (%)*, and *Promo Budget Utilization (%)*.
+- **`powerbi/PowerQuery_M_StarSchema_Connector.pq`:** Automated Power Query (M) script that ingests raw POS logs, deduplicates cashier scans, removes negative refunds, imputes missing store IDs, and loads the Gold Star Schema.
+- **`powerbi/Lidl_Baltics_Corporate_Theme.json`:** Official Lidl corporate color palette (`#003876` Navy, `#0050AA` Royal Blue, `#FFF000` Yellow, `#D92B2B` Red) ready for 1-click import into Power BI Desktop (*View $\rightarrow$ Themes $\rightarrow$ Browse for themes*).
+
+---
+
+## 7. Repository Structure & Deliverables
 
 ```text
 baltic-retail-loyalty-analytics/
 ├── README.md                                                 # Executive Documentation & Board Insights
+├── powerbi/                                                  # Power BI Project (.pbip), Semantic Model, DAX & M Scripts
+│   ├── BalticPlus_Loyalty_Analytics.pbip                     # Power BI Desktop Project File
+│   ├── BalticPlus_Loyalty_Analytics.SemanticModel/model.bim  # Tabular Star Schema Model & Relationships
+│   ├── BalticPlus_DAX_Measures.dax                           # 22 Production DAX Measures Library
+│   ├── PowerQuery_M_StarSchema_Connector.pq                  # Power Query (M) ETL & Star Schema Connector
+│   └── Lidl_Baltics_Corporate_Theme.json                     # Custom Lidl Corporate Power BI Theme
 ├── src/
-│   └── run_full_pipeline.py                                  # End-to-End Data Generator, Cleaning, ROI & Excel Builder
+│   ├── run_full_pipeline.py                                  # End-to-End Data Generator, Cleaning, ROI & Excel Builder
+│   ├── build_powerbi_project.py                              # Star Schema CSV/SQLite & Power BI Project Generator
+│   └── build_executive_presentation.py                       # Board Presentation Report Generator (.docx & .pdf)
 ├── sql/
 │   └── baltic_loyalty_analytics_queries.sql                  # Production SQL Queries (Cleaning, Pre/Post ROI, RFM)
 ├── assets/
 │   └── charts/                                               # High-Resolution Publication-Quality Charts (220 DPI)
-│       ├── 01_campaign_net_incremental_roi.png
-│       ├── 02_pre_post_campaign_trajectory.png
-│       ├── 03_baltic_country_basket_comparison.png
-│       └── 04_customer_segmentation_matrix.png
 ├── reports/                                                  # Processed Analytical Output Tables (CSV)
-│   ├── baltic_executive_country_kpis.csv
-│   ├── campaign_pre_post_incrementality_roi.csv
-│   ├── customer_rfm_promo_segmentation.csv
-│   ├── loyalty_app_customer_journey_funnel.csv
-│   └── data_quality_audit_report.csv
 ├── deliverables/                                             # Board-Ready Deliverables
 │   ├── Baltic_Loyalty_Performance_Report_Board_Pack.xlsx     # Multi-Sheet Executive Excel Workbook
 │   ├── Baltic_Loyalty_Interactive_Dashboard.html             # Interactive Self-Contained HTML Dashboard
 │   └── Executive_Presentation_Baltic_Loyalty_Analytics.pdf   # Board Presentation Report (PDF)
 └── data/
     ├── raw/sample_50k_raw_pos_transactions.csv               # 50k Sample of Raw POS Logs (with anomalies)
-    └── processed/                                            # Clean Dimension Tables (Stores, Customers, Campaigns)
+    └── processed/                                            # Gold Star Schema CSVs + SQLite Warehouse (.db)
 ```
 
 ---
 
-## 7. Quick Start (Reproduce Entire Pipeline in <15 Seconds)
+## 8. Quick Start (Reproduce Entire Pipeline in <15 Seconds)
 
 ```bash
 python src/run_full_pipeline.py
+python src/build_powerbi_project.py
 ```

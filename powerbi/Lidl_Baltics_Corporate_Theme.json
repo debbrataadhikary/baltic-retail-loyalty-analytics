@@ -1,0 +1,19 @@
+{
+  "name": "Lidl_Baltics_Corporate_Theme",
+  "dataColors": [
+    "#003876",
+    "#0050AA",
+    "#FFF000",
+    "#D92B2B",
+    "#1E824C",
+    "#525E6C",
+    "#8FAADC",
+    "#F4B183"
+  ],
+  "background": "#F4F6F9",
+  "foreground": "#1E242B",
+  "tableAccent": "#003876",
+  "good": "#1E824C",
+  "neutral": "#FFF000",
+  "bad": "#D92B2B"
+}
