@@ -1,0 +1,68 @@
+{
+  "id": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "name": "SharedResources",
+        "type": 2,
+        "items": [
+          {
+            "type": 202,
+            "path": "BaseThemes/CY25SU11.json",
+            "name": "CY25SU11"
+          }
+        ],
+        "disabled": false
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": 0,
+      "name": "ReportSection1",
+      "displayName": "Baltic Loyalty Executive Dashboard",
+      "filters": "[]",
+      "ordinal": 0,
+      "visualContainers": [
+        {
+          "x": 16,
+          "y": 20,
+          "z": 1000,
+          "width": 620,
+          "height": 330,
+          "config": "{\"name\": \"v1campRoi\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 20, \"z\": 1000, \"width\": 620, \"height\": 330, \"tabOrder\": 1000}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"campaign_pre_post_incrementality_roi.campaign_name\", \"active\": true}], \"Y\": [{\"queryRef\": \"Sum(campaign_pre_post_incrementality_roi.Net_Campaign_ROI_Pct)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"campaign_pre_post_incrementality_roi\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"campaign_name\"}, \"Name\": \"campaign_pre_post_incrementality_roi.campaign_name\", \"NativeReferenceName\": \"campaign_name\"}, {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Net_Campaign_ROI_Pct\"}}, \"Function\": 0}, \"Name\": \"Sum(campaign_pre_post_incrementality_roi.Net_Campaign_ROI_Pct)\", \"NativeReferenceName\": \"Net_Campaign_ROI_Pct\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Net_Campaign_ROI_Pct\"}}, \"Function\": 0}}}]}, \"drillFilterOtherVisuals\": true, \"hasDefaultSort\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'1. Campaign Pre/Post True Net Incremental ROI (%)'\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 20,
+          "z": 2000,
+          "width": 610,
+          "height": 330,
+          "config": "{\"name\": \"v2balticSales\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 650, \"y\": 20, \"z\": 2000, \"width\": 610, \"height\": 330, \"tabOrder\": 2000}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"baltic_executive_country_kpis.Country\", \"active\": true}], \"Y\": [{\"queryRef\": \"Sum(baltic_executive_country_kpis.Avg_Basket_Loyalty_EUR)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"baltic_executive_country_kpis\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Country\"}, \"Name\": \"baltic_executive_country_kpis.Country\", \"NativeReferenceName\": \"Country\"}, {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg_Basket_Loyalty_EUR\"}}, \"Function\": 0}, \"Name\": \"Sum(baltic_executive_country_kpis.Avg_Basket_Loyalty_EUR)\", \"NativeReferenceName\": \"Avg_Basket_Loyalty_EUR\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg_Basket_Loyalty_EUR\"}}, \"Function\": 0}}}]}, \"drillFilterOtherVisuals\": true, \"hasDefaultSort\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'2. Baltic Average Loyalty Basket Value (\\u20ac) by Country'\"}}}}}]}}}"
+        },
+        {
+          "x": 16,
+          "y": 365,
+          "z": 3000,
+          "width": 620,
+          "height": 330,
+          "config": "{\"name\": \"v3rfmSeg\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 365, \"z\": 3000, \"width\": 620, \"height\": 330, \"tabOrder\": 3000}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"customer_rfm_promo_segmentation.customer_archetype\", \"active\": true}], \"Y\": [{\"queryRef\": \"Sum(customer_rfm_promo_segmentation.Avg_Net_Basket_EUR)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"customer_rfm_promo_segmentation\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"customer_archetype\"}, \"Name\": \"customer_rfm_promo_segmentation.customer_archetype\", \"NativeReferenceName\": \"customer_archetype\"}, {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg_Net_Basket_EUR\"}}, \"Function\": 0}, \"Name\": \"Sum(customer_rfm_promo_segmentation.Avg_Net_Basket_EUR)\", \"NativeReferenceName\": \"Avg_Net_Basket_EUR\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg_Net_Basket_EUR\"}}, \"Function\": 0}}}]}, \"drillFilterOtherVisuals\": true, \"hasDefaultSort\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'3. Customer RFM Archetypes: Average Net Basket (\\u20ac)'\"}}}}}]}}}"
+        },
+        {
+          "x": 650,
+          "y": 365,
+          "z": 4000,
+          "width": 610,
+          "height": 330,
+          "config": "{\"name\": \"v4funnel\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 650, \"y\": 365, \"z\": 4000, \"width\": 610, \"height\": 330, \"tabOrder\": 4000}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"loyalty_app_customer_journey_funnel.Funnel_Stage\", \"active\": true}], \"Y\": [{\"queryRef\": \"Sum(loyalty_app_customer_journey_funnel.Users_Count)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"loyalty_app_customer_journey_funnel\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Funnel_Stage\"}, \"Name\": \"loyalty_app_customer_journey_funnel.Funnel_Stage\", \"NativeReferenceName\": \"Funnel_Stage\"}, {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Users_Count\"}}, \"Function\": 0}, \"Name\": \"Sum(loyalty_app_customer_journey_funnel.Users_Count)\", \"NativeReferenceName\": \"Users_Count\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Aggregation\": {\"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Users_Count\"}}, \"Function\": 0}}}]}, \"drillFilterOtherVisuals\": true, \"hasDefaultSort\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'4. Loyalty App Customer Journey Funnel (50,000 Members)'\"}}}}}]}}}"
+        }
+      ],
+      "config": "{}",
+      "displayOption": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "config": "{\"version\":\"5.68\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY25SU11\",\"type\":2,\"version\":{\"visual\":\"2.4.0\",\"report\":\"3.0.0\",\"page\":\"2.3.0\"}}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"linguisticSchemaSyncVersion\":2,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true,\"useEnhancedTooltips\":true}}",
+  "layoutOptimization": 0
+}

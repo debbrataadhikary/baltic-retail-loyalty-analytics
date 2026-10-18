@@ -7,39 +7,697 @@
       "legacyRedirects": true,
       "returnErrorValuesAsNull": true
     },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
     "tables": [
+      {
+        "name": "baltic_executive_country_kpis",
+        "columns": [
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Country_Code",
+            "dataType": "string",
+            "sourceColumn": "Country_Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Active_Stores",
+            "dataType": "int64",
+            "sourceColumn": "Active_Stores",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Total_Transactions",
+            "dataType": "int64",
+            "sourceColumn": "Total_Transactions",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Total_Net_Sales_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Net_Sales_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Loyalty_Scan_Share_Pct",
+            "dataType": "double",
+            "sourceColumn": "Loyalty_Scan_Share_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Loyalty_Revenue_Share_Pct",
+            "dataType": "double",
+            "sourceColumn": "Loyalty_Revenue_Share_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Basket_Loyalty_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Basket_Loyalty_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Basket_Guest_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Basket_Guest_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Basket_Uplift_EUR",
+            "dataType": "double",
+            "sourceColumn": "Basket_Uplift_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Basket_Uplift_Pct",
+            "dataType": "double",
+            "sourceColumn": "Basket_Uplift_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Coupon_Redemption_Rate_Pct",
+            "dataType": "double",
+            "sourceColumn": "Coupon_Redemption_Rate_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Promo_Discount_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Promo_Discount_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "baltic_executive_country_kpis",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\reports\\\\baltic_executive_country_kpis.csv\"),[Delimiter=\",\", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"Country\", type text}, {\"Country_Code\", type text}, {\"Active_Stores\", Int64.Type}, {\"Total_Transactions\", Int64.Type}, {\"Total_Net_Sales_EUR\", type number}, {\"Loyalty_Scan_Share_Pct\", type number}, {\"Loyalty_Revenue_Share_Pct\", type number}, {\"Avg_Basket_Loyalty_EUR\", type number}, {\"Avg_Basket_Guest_EUR\", type number}, {\"Basket_Uplift_EUR\", type number}, {\"Basket_Uplift_Pct\", type number}, {\"Coupon_Redemption_Rate_Pct\", type number}, {\"Total_Promo_Discount_EUR\", type number}})",
+                "in",
+                "    ChangedType"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "campaign_pre_post_incrementality_roi",
+        "columns": [
+          {
+            "name": "campaign_id",
+            "dataType": "string",
+            "sourceColumn": "campaign_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "campaign_name",
+            "dataType": "string",
+            "sourceColumn": "campaign_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "mechanic_type",
+            "dataType": "string",
+            "sourceColumn": "mechanic_type",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "target_category",
+            "dataType": "string",
+            "sourceColumn": "target_category",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nominal_discount_pct",
+            "dataType": "double",
+            "sourceColumn": "nominal_discount_pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "planned_budget_eur",
+            "dataType": "double",
+            "sourceColumn": "planned_budget_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "commercial_classification",
+            "dataType": "string",
+            "sourceColumn": "commercial_classification",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Redemptions",
+            "dataType": "int64",
+            "sourceColumn": "Redemptions",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Avg_Promo_Item_Spend_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Promo_Item_Spend_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Halo_Other_Spend_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Halo_Other_Spend_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Gross_Basket_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Gross_Basket_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Net_Basket_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Net_Basket_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Gross_Revenue_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Gross_Revenue_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Discount_Cost_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Discount_Cost_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Net_Revenue_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Net_Revenue_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Net_Margin_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Net_Margin_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Cannibalization_Rate_Pct",
+            "dataType": "double",
+            "sourceColumn": "Cannibalization_Rate_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Post_Campaign_Pantry_Dip_Pct",
+            "dataType": "double",
+            "sourceColumn": "Post_Campaign_Pantry_Dip_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Cherry_Picker_Share_Pct",
+            "dataType": "double",
+            "sourceColumn": "Cherry_Picker_Share_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "True_Incremental_Revenue_EUR",
+            "dataType": "double",
+            "sourceColumn": "True_Incremental_Revenue_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Net_Incremental_Margin_EUR",
+            "dataType": "double",
+            "sourceColumn": "Net_Incremental_Margin_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Net_Campaign_ROI_Pct",
+            "dataType": "double",
+            "sourceColumn": "Net_Campaign_ROI_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Budget_Utilization_Pct",
+            "dataType": "double",
+            "sourceColumn": "Budget_Utilization_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Budget_Variance_EUR",
+            "dataType": "double",
+            "sourceColumn": "Budget_Variance_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "campaign_pre_post_incrementality_roi",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\reports\\\\campaign_pre_post_incrementality_roi.csv\"),[Delimiter=\",\", Columns=24, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"campaign_id\", type text}, {\"campaign_name\", type text}, {\"mechanic_type\", type text}, {\"target_category\", type text}, {\"nominal_discount_pct\", type number}, {\"planned_budget_eur\", type number}, {\"commercial_classification\", type text}, {\"Redemptions\", Int64.Type}, {\"Avg_Promo_Item_Spend_EUR\", type number}, {\"Avg_Halo_Other_Spend_EUR\", type number}, {\"Avg_Gross_Basket_EUR\", type number}, {\"Avg_Net_Basket_EUR\", type number}, {\"Total_Gross_Revenue_EUR\", type number}, {\"Total_Discount_Cost_EUR\", type number}, {\"Total_Net_Revenue_EUR\", type number}, {\"Total_Net_Margin_EUR\", type number}, {\"Cannibalization_Rate_Pct\", type number}, {\"Post_Campaign_Pantry_Dip_Pct\", type number}, {\"Cherry_Picker_Share_Pct\", type number}, {\"True_Incremental_Revenue_EUR\", type number}, {\"Net_Incremental_Margin_EUR\", type number}, {\"Net_Campaign_ROI_Pct\", type number}, {\"Budget_Utilization_Pct\", type number}, {\"Budget_Variance_EUR\", type number}})",
+                "in",
+                "    ChangedType"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "customer_rfm_promo_segmentation",
+        "columns": [
+          {
+            "name": "customer_archetype",
+            "dataType": "string",
+            "sourceColumn": "customer_archetype",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Total_Transactions",
+            "dataType": "int64",
+            "sourceColumn": "Total_Transactions",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Unique_Customers",
+            "dataType": "int64",
+            "sourceColumn": "Unique_Customers",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Avg_Net_Basket_EUR",
+            "dataType": "double",
+            "sourceColumn": "Avg_Net_Basket_EUR",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Avg_Items_Per_Basket",
+            "dataType": "double",
+            "sourceColumn": "Avg_Items_Per_Basket",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Coupon_Usage_Rate_Pct",
+            "dataType": "double",
+            "sourceColumn": "Coupon_Usage_Rate_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Net_Sales_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Net_Sales_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Discount_Claimed_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Discount_Claimed_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Total_Net_Margin_EUR",
+            "dataType": "double",
+            "sourceColumn": "Total_Net_Margin_EUR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Recommended_CRM_Action",
+            "dataType": "string",
+            "sourceColumn": "Recommended_CRM_Action",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "customer_rfm_promo_segmentation",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\reports\\\\customer_rfm_promo_segmentation.csv\"),[Delimiter=\",\", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"customer_archetype\", type text}, {\"Total_Transactions\", Int64.Type}, {\"Unique_Customers\", Int64.Type}, {\"Avg_Net_Basket_EUR\", type number}, {\"Avg_Items_Per_Basket\", type number}, {\"Coupon_Usage_Rate_Pct\", type number}, {\"Total_Net_Sales_EUR\", type number}, {\"Total_Discount_Claimed_EUR\", type number}, {\"Total_Net_Margin_EUR\", type number}, {\"Recommended_CRM_Action\", type text}})",
+                "in",
+                "    ChangedType"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "loyalty_app_customer_journey_funnel",
+        "columns": [
+          {
+            "name": "Stage_Order",
+            "dataType": "int64",
+            "sourceColumn": "Stage_Order",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Funnel_Stage",
+            "dataType": "string",
+            "sourceColumn": "Funnel_Stage",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Users_Count",
+            "dataType": "int64",
+            "sourceColumn": "Users_Count",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Conversion_From_Prev_Pct",
+            "dataType": "double",
+            "sourceColumn": "Conversion_From_Prev_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "Overall_Penetration_Pct",
+            "dataType": "double",
+            "sourceColumn": "Overall_Penetration_Pct",
+            "summarizeBy": "average",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "loyalty_app_customer_journey_funnel",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\reports\\\\loyalty_app_customer_journey_funnel.csv\"),[Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"Stage_Order\", Int64.Type}, {\"Funnel_Stage\", type text}, {\"Users_Count\", Int64.Type}, {\"Conversion_From_Prev_Pct\", type number}, {\"Overall_Penetration_Pct\", type number}})",
+                "in",
+                "    ChangedType"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
       {
         "name": "dim_stores",
         "columns": [
           {
             "name": "store_id",
             "dataType": "string",
-            "sourceColumn": "store_id"
+            "sourceColumn": "store_id",
+            "summarizeBy": "none"
           },
           {
             "name": "country",
             "dataType": "string",
-            "sourceColumn": "country"
+            "sourceColumn": "country",
+            "summarizeBy": "none"
           },
           {
             "name": "country_code",
             "dataType": "string",
-            "sourceColumn": "country_code"
+            "sourceColumn": "country_code",
+            "summarizeBy": "none"
           },
           {
             "name": "city",
             "dataType": "string",
-            "sourceColumn": "city"
+            "sourceColumn": "city",
+            "summarizeBy": "none"
           },
           {
             "name": "store_format",
             "dataType": "string",
-            "sourceColumn": "store_format"
+            "sourceColumn": "store_format",
+            "summarizeBy": "none"
           },
           {
             "name": "opening_year",
             "dataType": "int64",
-            "sourceColumn": "opening_year"
+            "sourceColumn": "opening_year",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -51,131 +709,22 @@
               "expression": [
                 "let",
                 "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\data\\\\processed\\\\dim_stores.csv\"),[Delimiter=\",\", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
-                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Promoted,{{\"opening_year\", Int64.Type}})",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"store_id\", type text}, {\"country\", type text}, {\"country_code\", type text}, {\"city\", type text}, {\"store_format\", type text}, {\"opening_year\", Int64.Type}})",
                 "in",
-                "    Typed"
+                "    ChangedType"
               ]
             }
-          }
-        ]
-      },
-      {
-        "name": "dim_campaigns_coupons",
-        "columns": [
-          {
-            "name": "campaign_id",
-            "dataType": "string",
-            "sourceColumn": "campaign_id"
-          },
-          {
-            "name": "campaign_name",
-            "dataType": "string",
-            "sourceColumn": "campaign_name"
-          },
-          {
-            "name": "mechanic_type",
-            "dataType": "string",
-            "sourceColumn": "mechanic_type"
-          },
-          {
-            "name": "target_category",
-            "dataType": "string",
-            "sourceColumn": "target_category"
-          },
-          {
-            "name": "nominal_discount_pct",
-            "dataType": "double",
-            "sourceColumn": "nominal_discount_pct"
-          },
-          {
-            "name": "planned_budget_eur",
-            "dataType": "double",
-            "sourceColumn": "planned_budget_eur"
-          },
-          {
-            "name": "commercial_classification",
-            "dataType": "string",
-            "sourceColumn": "commercial_classification"
           }
         ],
-        "partitions": [
+        "annotations": [
           {
-            "name": "dim_campaigns_coupons",
-            "mode": "import",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\data\\\\processed\\\\dim_campaigns_coupons.csv\"),[Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
-                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Promoted,{{\"nominal_discount_pct\", type number}, {\"planned_budget_eur\", type number}})",
-                "in",
-                "    Typed"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "dim_calendar",
-        "columns": [
-          {
-            "name": "date_key",
-            "dataType": "string",
-            "sourceColumn": "date_key"
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           },
           {
-            "name": "year",
-            "dataType": "int64",
-            "sourceColumn": "year"
-          },
-          {
-            "name": "month_num",
-            "dataType": "int64",
-            "sourceColumn": "month_num"
-          },
-          {
-            "name": "month_name",
-            "dataType": "string",
-            "sourceColumn": "month_name"
-          },
-          {
-            "name": "month_short",
-            "dataType": "string",
-            "sourceColumn": "month_short"
-          },
-          {
-            "name": "fiscal_week",
-            "dataType": "int64",
-            "sourceColumn": "fiscal_week"
-          },
-          {
-            "name": "day_of_week",
-            "dataType": "string",
-            "sourceColumn": "day_of_week"
-          },
-          {
-            "name": "is_weekend",
-            "dataType": "int64",
-            "sourceColumn": "is_weekend"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "dim_calendar",
-            "mode": "import",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\data\\\\processed\\\\dim_calendar.csv\"),[Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
-                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Promoted,{{\"year\", Int64.Type}, {\"month_num\", Int64.Type}, {\"fiscal_week\", Int64.Type}, {\"is_weekend\", Int64.Type}})",
-                "in",
-                "    Typed"
-              ]
-            }
+            "name": "PBI_ResultType",
+            "value": "Table"
           }
         ]
       },
@@ -185,92 +734,173 @@
           {
             "name": "transaction_id",
             "dataType": "string",
-            "sourceColumn": "transaction_id"
+            "sourceColumn": "transaction_id",
+            "summarizeBy": "none"
           },
           {
             "name": "transaction_date",
             "dataType": "string",
-            "sourceColumn": "transaction_date"
+            "sourceColumn": "transaction_date",
+            "summarizeBy": "none"
           },
           {
             "name": "fiscal_week",
             "dataType": "int64",
-            "sourceColumn": "fiscal_week"
+            "sourceColumn": "fiscal_week",
+            "summarizeBy": "none"
           },
           {
             "name": "country_code",
             "dataType": "string",
-            "sourceColumn": "country_code"
+            "sourceColumn": "country_code",
+            "summarizeBy": "none"
           },
           {
             "name": "store_id",
             "dataType": "string",
-            "sourceColumn": "store_id"
+            "sourceColumn": "store_id",
+            "summarizeBy": "none"
           },
           {
             "name": "is_loyalty_scan",
             "dataType": "int64",
-            "sourceColumn": "is_loyalty_scan"
+            "sourceColumn": "is_loyalty_scan",
+            "summarizeBy": "sum"
           },
           {
             "name": "customer_id",
             "dataType": "string",
-            "sourceColumn": "customer_id"
+            "sourceColumn": "customer_id",
+            "summarizeBy": "none"
           },
           {
             "name": "customer_archetype",
             "dataType": "string",
-            "sourceColumn": "customer_archetype"
+            "sourceColumn": "customer_archetype",
+            "summarizeBy": "none"
           },
           {
             "name": "coupon_applied",
             "dataType": "int64",
-            "sourceColumn": "coupon_applied"
+            "sourceColumn": "coupon_applied",
+            "summarizeBy": "sum"
           },
           {
             "name": "campaign_id",
             "dataType": "string",
-            "sourceColumn": "campaign_id"
+            "sourceColumn": "campaign_id",
+            "summarizeBy": "none"
           },
           {
             "name": "items_count",
             "dataType": "int64",
-            "sourceColumn": "items_count"
+            "sourceColumn": "items_count",
+            "summarizeBy": "sum"
           },
           {
             "name": "promo_item_spend_eur",
             "dataType": "double",
-            "sourceColumn": "promo_item_spend_eur"
+            "sourceColumn": "promo_item_spend_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "non_promo_halo_spend_eur",
             "dataType": "double",
-            "sourceColumn": "non_promo_halo_spend_eur"
+            "sourceColumn": "non_promo_halo_spend_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "gross_basket_eur",
             "dataType": "double",
-            "sourceColumn": "gross_basket_eur"
+            "sourceColumn": "gross_basket_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "discount_amount_eur",
             "dataType": "double",
-            "sourceColumn": "discount_amount_eur"
+            "sourceColumn": "discount_amount_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "net_sales_eur",
             "dataType": "double",
-            "sourceColumn": "net_sales_eur"
+            "sourceColumn": "net_sales_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "net_margin_eur",
             "dataType": "double",
-            "sourceColumn": "net_margin_eur"
+            "sourceColumn": "net_margin_eur",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
           },
           {
             "name": "record_status",
             "dataType": "string",
-            "sourceColumn": "record_status"
+            "sourceColumn": "record_status",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_pos_transactions_gold",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\data\\\\processed\\\\fact_pos_transactions_gold.csv\"),[Delimiter=\",\", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    ChangedType = Table.TransformColumnTypes(PromotedHeaders,{{\"transaction_id\", type text}, {\"transaction_date\", type text}, {\"fiscal_week\", Int64.Type}, {\"country_code\", type text}, {\"store_id\", type text}, {\"is_loyalty_scan\", Int64.Type}, {\"customer_id\", type text}, {\"customer_archetype\", type text}, {\"coupon_applied\", Int64.Type}, {\"campaign_id\", type text}, {\"items_count\", Int64.Type}, {\"promo_item_spend_eur\", type number}, {\"non_promo_halo_spend_eur\", type number}, {\"gross_basket_eur\", type number}, {\"discount_amount_eur\", type number}, {\"net_sales_eur\", type number}, {\"net_margin_eur\", type number}, {\"record_status\", type text}})",
+                "in",
+                "    ChangedType"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
           }
         ],
         "measures": [
@@ -290,133 +920,24 @@
             "formatString": "\u20ac#,0.00"
           },
           {
-            "name": "Loyalty App Baskets",
-            "expression": "CALCULATE([Total Validated Baskets], fact_pos_transactions_gold[is_loyalty_scan] = 1)",
-            "formatString": "#,0"
-          },
-          {
             "name": "Loyalty Scan Penetration (%)",
-            "expression": "DIVIDE([Loyalty App Baskets], [Total Validated Baskets], 0)",
+            "expression": "DIVIDE(CALCULATE([Total Validated Baskets], fact_pos_transactions_gold[is_loyalty_scan]=1), [Total Validated Baskets], 0)",
             "formatString": "0.0%"
           },
           {
             "name": "Avg Loyalty Basket (\u20ac)",
-            "expression": "CALCULATE([Average Net Basket (\u20ac)], fact_pos_transactions_gold[is_loyalty_scan] = 1)",
+            "expression": "CALCULATE([Average Net Basket (\u20ac)], fact_pos_transactions_gold[is_loyalty_scan]=1)",
             "formatString": "\u20ac#,0.00"
           },
           {
             "name": "Avg Guest Basket (\u20ac)",
-            "expression": "CALCULATE([Average Net Basket (\u20ac)], fact_pos_transactions_gold[is_loyalty_scan] = 0)",
+            "expression": "CALCULATE([Average Net Basket (\u20ac)], fact_pos_transactions_gold[is_loyalty_scan]=0)",
             "formatString": "\u20ac#,0.00"
           },
           {
             "name": "Loyalty Basket Uplift (\u20ac)",
             "expression": "[Avg Loyalty Basket (\u20ac)] - [Avg Guest Basket (\u20ac)]",
             "formatString": "+\u20ac#,0.00;-\u20ac#,0.00;\u20ac0.00"
-          },
-          {
-            "name": "Avg Attached Halo Spend (\u20ac)",
-            "expression": "CALCULATE(AVERAGE(fact_pos_transactions_gold[non_promo_halo_spend_eur]), fact_pos_transactions_gold[coupon_applied] = 1)",
-            "formatString": "\u20ac#,0.00"
-          },
-          {
-            "name": "Total Promo Discount Spend (\u20ac)",
-            "expression": "SUM(fact_pos_transactions_gold[discount_amount_eur])",
-            "formatString": "\u20ac#,0.00"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "fact_pos_transactions_gold",
-            "mode": "import",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\data\\\\processed\\\\fact_pos_transactions_gold.csv\"),[Delimiter=\",\", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
-                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Promoted,{{\"fiscal_week\", Int64.Type}, {\"is_loyalty_scan\", Int64.Type}, {\"coupon_applied\", Int64.Type}, {\"items_count\", Int64.Type}, {\"promo_item_spend_eur\", type number}, {\"non_promo_halo_spend_eur\", type number}, {\"gross_basket_eur\", type number}, {\"discount_amount_eur\", type number}, {\"net_sales_eur\", type number}, {\"net_margin_eur\", type number}})",
-                "in",
-                "    Typed"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "campaign_pre_post_incrementality_roi",
-        "columns": [
-          {
-            "name": "campaign_id",
-            "dataType": "string",
-            "sourceColumn": "campaign_id"
-          },
-          {
-            "name": "campaign_name",
-            "dataType": "string",
-            "sourceColumn": "campaign_name"
-          },
-          {
-            "name": "mechanic_type",
-            "dataType": "string",
-            "sourceColumn": "mechanic_type"
-          },
-          {
-            "name": "commercial_classification",
-            "dataType": "string",
-            "sourceColumn": "commercial_classification"
-          },
-          {
-            "name": "Redemptions",
-            "dataType": "int64",
-            "sourceColumn": "Redemptions"
-          },
-          {
-            "name": "Avg_Halo_Other_Spend_EUR",
-            "dataType": "double",
-            "sourceColumn": "Avg_Halo_Other_Spend_EUR"
-          },
-          {
-            "name": "Total_Discount_Cost_EUR",
-            "dataType": "double",
-            "sourceColumn": "Total_Discount_Cost_EUR"
-          },
-          {
-            "name": "True_Incremental_Revenue_EUR",
-            "dataType": "double",
-            "sourceColumn": "True_Incremental_Revenue_EUR"
-          },
-          {
-            "name": "Net_Incremental_Margin_EUR",
-            "dataType": "double",
-            "sourceColumn": "Net_Incremental_Margin_EUR"
-          },
-          {
-            "name": "Net_Campaign_ROI_Pct",
-            "dataType": "double",
-            "sourceColumn": "Net_Campaign_ROI_Pct"
-          },
-          {
-            "name": "Budget_Utilization_Pct",
-            "dataType": "double",
-            "sourceColumn": "Budget_Utilization_Pct"
-          }
-        ],
-        "partitions": [
-          {
-            "name": "campaign_pre_post_incrementality_roi",
-            "mode": "import",
-            "source": {
-              "type": "m",
-              "expression": [
-                "let",
-                "    Source = Csv.Document(File.Contents(\"d:\\\\DW- Internship\\\\Lidl-Loyalty-Data-Analyst\\\\baltic-retail-loyalty-analytics\\\\reports\\\\campaign_pre_post_incrementality_roi.csv\"),[Delimiter=\",\", Columns=24, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
-                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Promoted,{{\"Redemptions\", Int64.Type}, {\"Avg_Halo_Other_Spend_EUR\", type number}, {\"Total_Discount_Cost_EUR\", type number}, {\"True_Incremental_Revenue_EUR\", type number}, {\"Net_Incremental_Margin_EUR\", type number}, {\"Net_Campaign_ROI_Pct\", type number}, {\"Budget_Utilization_Pct\", type number}})",
-                "in",
-                "    Typed"
-              ]
-            }
           }
         ]
       }
@@ -430,18 +951,21 @@
         "toColumn": "store_id"
       },
       {
-        "name": "rel_campaign_pos",
+        "name": "rel_camp_pos",
         "fromTable": "fact_pos_transactions_gold",
         "fromColumn": "campaign_id",
-        "toTable": "dim_campaigns_coupons",
+        "toTable": "campaign_pre_post_incrementality_roi",
         "toColumn": "campaign_id"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"baltic_executive_country_kpis\",\"campaign_pre_post_incrementality_roi\",\"customer_rfm_promo_segmentation\",\"loyalty_app_customer_journey_funnel\",\"dim_stores\",\"fact_pos_transactions_gold\"]"
       },
       {
-        "name": "rel_date_pos",
-        "fromTable": "fact_pos_transactions_gold",
-        "fromColumn": "transaction_date",
-        "toTable": "dim_calendar",
-        "toColumn": "date_key"
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
       }
     ]
   }
